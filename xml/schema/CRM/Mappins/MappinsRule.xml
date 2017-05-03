@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<table>
+  <base>CRM/Mappins</base>
+  <class>MappinsRule</class>
+  <name>civicrm_mappins_rule</name>
+  <comment>Rules for map pins</comment>
+  <add>4.7</add>
+  <log>true</log>
+
+  <field>
+    <name>id</name>
+    <type>int unsigned</type>
+    <required>true</required>
+    <comment>Unique MappinsRule ID</comment>
+    <add>4.7</add>
+  </field>
+  <field>
+    <name>criteria</name>
+    <type>varchar</type>
+    <length>255</length>
+    <add>4.7</add>
+    <comment>Type of rule (e.g., group, tag)</comment>
+  </field>
+  <field>
+    <name>value</name>
+    <type>varchar</type>
+    <length>255</length>
+    <add>4.7</add>
+    <comment>Value to filter on</comment>
+  </field>
+  <field>
+    <name>image_url</name>
+    <type>varchar</type>
+    <length>255</length>
+    <add>4.7</add>
+    <comment>URL for pin image</comment>
+  </field>
+  <field>
+    <name>is_active</name>
+    <title>Is Active</title>
+    <type>boolean</type>
+    <default>1</default>
+    <comment>Is this mappins_rule enabled</comment>
+    <add>4.7</add>
+  </field>
+  <field>
+    <name>weight</name>
+    <title>Order</title>
+    <type>int</type>
+    <default>1</default>
+    <comment>Relative order of this mappins_rule; lowest weights sort first.</comment>
+    <add>4.7</add>
+  </field>
+  <primaryKey>
+    <name>id</name>
+    <autoincrement>true</autoincrement>
+  </primaryKey>
+</table>

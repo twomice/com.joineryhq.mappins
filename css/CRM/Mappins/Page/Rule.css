@@ -1,0 +1,10 @@
+table#options tbody tr {
+  cursor: move;
+}
+
+/* Disabled rows have visually toned-down images */
+table#options tbody tr.disabled img.crm-mappins-rule-image {
+  opacity: .25;
+  filter: grayscale(50%);
+  -webkit-filter: grayscale(.5);
+}
