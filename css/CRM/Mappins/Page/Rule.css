@@ -1,6 +1,9 @@
 table#options tbody tr {
   cursor: move;
 }
+table#options thead th {
+  cursor: default;
+}
 
 /* Disabled rows have visually toned-down images */
 table#options tbody tr.disabled img.crm-mappins-rule-image {

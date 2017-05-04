@@ -30,11 +30,12 @@
     </thead>    
     <tbody>
       {foreach from=$rows item=row}
+      {assign var=criteria value=`$row.criteria`}
       <tr id="mappins_rule-{$row.id}" class="crm-entity {cycle values="odd-row,even-row"} {$row.class}{if NOT $row.is_active} disabled{/if} crm-mappinsrule">
           <td class="crm-mappinsrule" data-field="id">{$row.id}</td>
-          <td class="crm-mappinsrule" data-field="criteria">{$row.criteria}</td>
+          <td class="crm-mappinsrule" data-field="criteria">{$criteriaOptions.$criteria}</td>
           <td class="crm-mappinsrule-value crm-editable" data-field="value">{$row.value}</td>
-          <td><img class="crm-mappins-rule-image" id="crm-mappinsrule-image-{$row.id}" src="{$row.image_url}" height="20px" width="20px" /></td>
+          <td><a class="button crm-mappins-rule-image-button" href="#" data-rule-id="{$row.id}"><img class="crm-mappins-rule-image" id="crm-mappinsrule-image-{$row.id}" src="{$row.image_url}" height="20px" width="20px" /></a></td>
           <td class="crm-mappinsrule-is_active" id="row_{$row.id}_status">{if $row.is_active eq 1} {ts}Yes{/ts} {else} {ts}No{/ts} {/if}</td>
           <td>{$row.action|replace:'xx':$row.id}</td>
       </tr>

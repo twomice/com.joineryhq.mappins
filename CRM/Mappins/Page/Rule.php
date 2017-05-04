@@ -2,18 +2,6 @@
 
 class CRM_Mappins_Page_Rule extends CRM_Core_Page_Basic {
 
-  public function run() {
-    // Example: Set the page-title dynamically; alternatively, declare a static title in xml/Menu/*.xml
-    CRM_Utils_System::setTitle(ts('Map Pins: Rules'));
-
-    CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.mappins', 'js/CRM/Mappins/Page/Rule.js');
-    CRM_Core_Resources::singleton()->addStyleFile('com.joineryhq.mappins', 'css/CRM/Mappins/Page/Rule.css');
-    
-    // parent::run 3rd argument is $sort, so sort by weight.
-    parent::run(NULL, NULL, 'weight');
-  }
-
-
   public $useLivePageJS = TRUE;
 
   /**
@@ -23,6 +11,24 @@ class CRM_Mappins_Page_Rule extends CRM_Core_Page_Basic {
    */
   static $_links = NULL;
 
+  public function run() {
+    // Example: Set the page-title dynamically; alternatively, declare a static title in xml/Menu/*.xml
+    CRM_Utils_System::setTitle(ts('Map Pins: Rules'));
+  
+    // parent::run 3rd argument is $sort, so sort by weight.
+    parent::run(NULL, NULL, 'weight');
+  }
+  
+  public function browse() {
+    CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.mappins', 'js/CRM/Mappins/Page/Rule.js');
+    CRM_Core_Resources::singleton()->addStyleFile('com.joineryhq.mappins', 'css/CRM/Mappins/Page/Rule.css');
+    CRM_Core_Resources::singleton()->addStyleFile('com.joineryhq.mappins', 'css/CRM/Mappins/common.css');
+    
+    $this->assign('criteriaOptions', CRM_Mappins_BAO_MappinsRule::getCriteriaOptions());
+    
+    parent::browse();
+  }
+  
   /**
    * Get BAO Name.
    *

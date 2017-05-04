@@ -54,8 +54,8 @@ class CRM_Mappins_Form_Rule extends CRM_Admin_Form {
     $this->add('text', 'value', ts('Value'),
       CRM_Core_DAO::getAttribute('CRM_Mappins_DAO_MappinsRule', 'value')
     );
-    
-    $this->add('text', 'image_url', ts('Image URL'),
+
+    $this->add('hidden', 'image_url', ts('Image'),
       CRM_Core_DAO::getAttribute('CRM_Mappins_DAO_MappinsRule', 'image_url')
     );
 
@@ -66,27 +66,36 @@ class CRM_Mappins_Form_Rule extends CRM_Admin_Form {
     }
 
     $this->assign('mappins_rule_id', $this->_id);
+    
+    // Assign image_url from defaultValues; this is required because the image_url
+    // field is hidden, thus its value isn't available to the smarty template;
+    // and we want it so we can display the image.
+    $defaults = $this->setDefaultValues();
+    $this->assign('image_url', $defaults['image_url']);
 
     CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.mappins', 'js/CRM/Mappins/Form/Rule.js');
-    CRM_Core_Resources::singleton()->addStyleFile('com.joineryhq.mappins', 'css/CRM/Mappins/Form/Rule.css');
+    CRM_Core_Resources::singleton()->addStyleFile('com.joineryhq.mappins', 'css/CRM/Mappins/common.css');
   }
 
   /**
    * @return array
    */
   public function setDefaultValues() {
-    if ($this->_action != CRM_Core_Action::DELETE &&
-      isset($this->_id)
-    ) {
-      $defaults = $params = array();
-      $params = array('id' => $this->_id);
-      $baoName = $this->_BAOName;
-      $baoName::retrieve($params, $defaults);
-      return $defaults;
+    static $defaults;
+    if (!isset($defaults)) {
+      if ($this->_action != CRM_Core_Action::DELETE &&
+        isset($this->_id)
+      ) {
+        $defaults = $params = array();
+        $params = array('id' => $this->_id);
+        $baoName = $this->_BAOName;
+        $baoName::retrieve($params, $defaults);
+      }
+      else {
+        $defaults = parent::setDefaultValues();
+      }
     }
-    else {
-      return parent::setDefaultValues();
-    }
+    return $defaults;
   }
 
   /**

@@ -4,13 +4,11 @@
  */
 CRM.$(function () {
   function openKCFinder() {
-    var field = this
     window.KCFinder = {
       callBack: function (url) {
-        CRM.$(field).val(url);
-        CRM.$(field).change();
+        CRM.$('input[type="hidden"][name="image_url"]').val(url);
+        CRM.$('img#mappinsrule-image-preview').attr('src', url);
         window.KCFinder = null;
-
       }
     };
 
@@ -21,16 +19,10 @@ CRM.$(function () {
     );
   }
 
-  function imageUrlChange() {
-    CRM.$('img#mappinsrule-image-preview').attr('src', CRM.$('input#image_url').val());
-  }
 
   function initializeImageKcfinder() {
-    CRM.$('input#image_url').click(openKCFinder);
-    CRM.$('input#image_url').attr('readonly', 'readonly');
-    CRM.$('tr#image_url_tr').addClass('has-kcfinder');
+    CRM.$('a#mappinsrule-image-button').click(openKCFinder);
   }
 
   initializeImageKcfinder();
-  CRM.$('input#image_url').change(imageUrlChange);
 })

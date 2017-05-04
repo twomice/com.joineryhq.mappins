@@ -34,31 +34,36 @@ CRM.$(function(){
     }          
   );
   
-  // Update image.
-  CRM.$( document ).ajaxComplete(function( event, xhr, settings ) {
-    if (settings.url == "/civicrm/ajax/rest") {
-       var queryParams = parseQuery(settings.data);
-       if (queryParams.entity == 'mappins_rule') {
-         var json = CRM.$.parseJSON(queryParams.json)
-         if (json.image_url && json.id) {
-           CRM.$('img#crm-mappinsrule-image-'+ json.id).attr('src', json.image_url);
-         }
-       }
-    }
-  });
-  
-  /**
-   * Return a given query string as an object.
-   * @param {type} qstr
-   * @returns {unresolved}
-   */ 
-  function parseQuery(qstr) {
-    var query = {};
-    var a = (qstr[0] === '?' ? qstr.substr(1) : qstr).split('&');
-    for (var i = 0; i < a.length; i++) {
-        var b = a[i].split('=');
-        query[decodeURIComponent(b[0])] = decodeURIComponent(b[1] || '');
-    }
-    return query;
+  function openKCFinder() {
+    var field = this
+    window.KCFinder = {
+      callBack: function (url) {
+        var ruleId = CRM.$(field).attr('data-rule-id');
+        CRM.$('img#crm-mappinsrule-image-'+ ruleId).attr('src', url);
+        window.KCFinder = null;
+        
+        saveRuleImageUrl(ruleId, url);
+      }
+    };
+
+    window.open(
+      '/sites/all/modules/civicrm/packages/kcfinder/browse.php?cms=civicrm&type=images', 
+      'kcfinder_textbox_image_url',
+      'status=0, toolbar=0, location=0, menubar=0, directories=0, resizable=1, scrollbars=0, width=800, height=600'
+    );
   }
+  
+  function saveRuleImageUrl(ruleId, url) {
+    CRM.api3('MappinsRule', 'create', {
+      'id': ruleId,
+      'image_url': url
+    },
+    true);
+  }
+
+  function initializeImageKcfinder() {
+    CRM.$('a.crm-mappins-rule-image-button').click(openKCFinder);
+  }
+
+  initializeImageKcfinder();
 })

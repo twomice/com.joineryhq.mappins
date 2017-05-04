@@ -50,13 +50,16 @@
             <span class="description">{ts}The value which the mapped contact must have, for the given criteria, in order for this rule to match.{/ts}</span></td>
         </tr>
         <tr class="crm-relationship-type-form-block-image_url" id="image_url_tr">
-            <td class="label">{$form.image_url.label}</td>
-            <td>{$form.image_url.html} <img id="mappinsrule-image-preview" src="{$form.image_url.value}" height="20px" width="20px" /><br />
-            <span class="description">
-              <span>{ts}The URL of the image to use if this rule matches.{/ts}</span>
-              <span id="image_url-description-manual">{ts}May be absolute (http://... or https://..) or relative (/...).{/ts}</span>
-              <span id="image_url-description-kcfinder">{ts}Click to select/upload an image.{/ts}</span>
-            </td>
+            <td class="label">Image</td>            
+            <td>
+              <a class="button crm-mappins-rule-image-button" id="mappinsrule-image-button" href="#" data-rule-id="{$row.id}">
+                <img id="mappinsrule-image-preview" src="{$image_url}" height="20px" width="20px" />
+              </a>
+              <br style="clear:both" />
+              <span class="description">{ts}The image to use if this rule matches. Click to select/upload an image.{/ts}</span>
+              </td>
+            </td>              
+              
         </tr>
         <tr class="crm-relationship-type-form-block-is_active">
             <td class="label">{$form.is_active.label}</td>
