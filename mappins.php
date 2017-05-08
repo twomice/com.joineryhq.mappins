@@ -67,11 +67,17 @@ function _mappins_location_matches_rule($location, $rule) {
   $api_params = array();
   switch ($rule['criteria']) {
     case 'group':
-      $entity = 'GroupContact';
+      // Use the Contact api to check group membership, so that we're also
+      // including smart group membership.
+      // References:
+      //  https://issues.civicrm.org/jira/browse/CRM-20144 (note "funky syntax" comment from Coleman)
+      //  https://issues.civicrm.org/jira/browse/CRM-11903
+      //  https://issues.civicrm.org/jira/browse/CRM-9021
+      $entity = 'Contact';
       $api_params = array(
         'status' => "Added",
         'contact_id' => $contact_id,
-        'group_id' => $rule['value'],
+        'group' => array($rule['value'] => 1),
       );
       break;
     case 'tag':
