@@ -55,7 +55,7 @@
               <a class="button crm-mappins-rule-image-button" id="mappinsrule-image-button" href="#" data-rule-id="{$row.id}">
                 <img id="mappinsrule-image-preview" src="{$image_url}" height="20px" width="20px" />
               </a>
-                <span style="">{$form.image_url.html}</span>
+              <span style="display: none">{$form.image_url.html}</span>
               <br style="clear:both" />
               <span class="description">{ts}The image to use if this rule matches. Click to select/upload an image.{/ts}</span>
               </td>
@@ -65,7 +65,7 @@
         <tr class="crm-relationship-type-form-block-uf_group_id">
             <td class="label">{$form.uf_group_id.label}</td>
             <td>{$form.uf_group_id.html}<br />
-            <span class="description">{ts}uf_group_id{/ts}</span></td>
+            <span class="description">{ts}This rule will only apply on the selected profile(s); leave blank for all profiles.{/ts}</span></td>
         </tr>
         <tr class="crm-relationship-type-form-block-is_active">
             <td class="label">{$form.is_active.label}</td>
