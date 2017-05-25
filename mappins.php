@@ -2,12 +2,17 @@
 
 require_once 'mappins.civix.php';
 
+/**
+ * Implements hook_civicrm_buildForm().
+ */
 function mappins_civicrm_buildForm($formName, &$form) {
   if ($formName == 'CRM_Contact_Form_Task_Map') {
     // Determine profile gid.
     parse_str(html_entity_decode($form->controller->_entryURL), $entryURL);
     $gid = $entryURL['gid'];
 
+    // Instantiate a map object and replace the pins, being sure to convey the
+    // Profile gid so that only rules for this profile are applied.
     $map = new CRM_Mappins_MappinsMap();
     $map->setGid($gid);
     $map->replaceLocationPins();
@@ -143,22 +148,6 @@ function mappins_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
  *
   function mappins_civicrm_preProcess($formName, &$form) {
 
-  } // */
-/**
- * Implements hook_civicrm_navigationMenu().
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
- *
-  function mappins_civicrm_navigationMenu(&$menu) {
-  _mappins_civix_insert_navigation_menu($menu, NULL, array(
-  'label' => ts('The Page', array('domain' => 'com.joineryhq.mappins')),
-  'name' => 'the_page',
-  'url' => 'civicrm/the-page',
-  'permission' => 'access CiviReport,access CiviContribute',
-  'operator' => 'OR',
-  'separator' => 0,
-  ));
-  _mappins_civix_navigationMenu($menu);
   } // */
 
 /**

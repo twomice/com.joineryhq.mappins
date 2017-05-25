@@ -1,13 +1,7 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- * A map, on which we'll set the map images.
+ * A map, on which we'll set the map images based on our rules.
  */
 class CRM_Mappins_MappinsMap {
   /**
@@ -32,6 +26,11 @@ class CRM_Mappins_MappinsMap {
    */
   protected $rules;
 
+  /**
+   * Constructor.
+   *
+   * @param Object $tpl The Smarty template object.
+   */
   public function __construct($tpl = NULL) {
     if (!isset($tpl)) {
       $tpl = CRM_Core_Smarty::singleton();
@@ -39,10 +38,19 @@ class CRM_Mappins_MappinsMap {
     $this->tpl = $tpl;
   }
 
+  /**
+   * Set the $gid property.
+   */
   public function setGid($gid) {
     $this->gid = $gid;
   }
 
+  /**
+   * Retrieve all the rules that should apply on this map. If they've not
+   * been compiled already, this method will compile them once.
+   *
+   * @return Array An array of rules, in order of priority.
+   */
   public function getRules() {
     if (!isset($this->rules)) {
       $this->rules = array();
@@ -74,12 +82,23 @@ class CRM_Mappins_MappinsMap {
     return $this->rules;
   }
 
+  /**
+   * Perform the replacement of map pin images for each location on the map,
+   * based on the relevant MappinRules. This method actually changes the
+   * src of the pin images within the Smarty template variables.
+   */
   public function replaceLocationPins() {
     foreach ($this->tpl->_tpl_vars['locations'] as &$location) {
       $this->setLocationImage($location);
     }
   }
 
+  /**
+   * For a given location, set the URL of the image to be used for the map pin.
+   *
+   * @param array $location A single location, as defined in the Smarty template
+   *   variable 'locations'.
+   */
   protected function setLocationImage(&$location) {
     foreach ($this->getRules() as $rule) {
       if (static::doesLocationMatchRule($location, $rule)) {
@@ -107,6 +126,15 @@ class CRM_Mappins_MappinsMap {
     }
   }
 
+  /**
+   * Check whether the given location is affected by the given rule.
+   *
+   * @param array $location A single location, as defined in the Smarty template
+   *   variable 'locations'.
+   * @param array $rule A rule, as returned as an array member from $this->getRules().
+   *
+   * @return bool
+   */
   protected static function doesLocationMatchRule($location, $rule) {
     $contact_id = $location['contactID'];
     $entity = '';
