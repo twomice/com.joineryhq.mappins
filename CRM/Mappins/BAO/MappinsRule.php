@@ -7,10 +7,16 @@ class CRM_Mappins_BAO_MappinsRule extends CRM_Mappins_DAO_MappinsRule {
    *
    * @param array $params key-value pairs
    * @return CRM_Mappins_DAO_MappinsRule|NULL
-   *
+   */
   public static function create($params) {
     $className = 'CRM_Mappins_DAO_MappinsRule';
     $entityName = 'MappinsRule';
+
+    // Compress uf_group_id to a padded string for storage.
+    $params['uf_group_id'] = CRM_Utils_Array::implodePadded(CRM_Utils_Array::value($params, 'uf_group_id'));
+    // Set is_active to FALSE if not given.
+    $params['is_active'] = CRM_Utils_Array::value('is_active', $params, FALSE);
+
     $hook = empty($params['id']) ? 'create' : 'edit';
 
     CRM_Utils_Hook::pre($hook, $entityName, CRM_Utils_Array::value('id', $params), $params);
@@ -20,8 +26,8 @@ class CRM_Mappins_BAO_MappinsRule extends CRM_Mappins_DAO_MappinsRule {
     CRM_Utils_Hook::post($hook, $entityName, $instance->id, $instance);
 
     return $instance;
-  } */
-  
+  }
+
   public static function getCriteriaOptions() {
     return array(
       'contact_sub_type' => ts('Contact Sub Type'),
@@ -29,7 +35,18 @@ class CRM_Mappins_BAO_MappinsRule extends CRM_Mappins_DAO_MappinsRule {
       'tag' => ts('Tag ID'),
     );
   }
-  
+
+  public static function getUFGroupOptions() {
+    $uf_group_options = array();
+    $result = civicrm_api3('UFGroup', 'get', array(
+      'options' => array('limit' => 0),
+    ));
+    foreach ($result['values'] as $value) {
+      $uf_group_options[$value['id']] = $value['title'];
+    }
+    return $uf_group_options;
+  }
+
   /**
    * Fetch object based on array of properties.
    *

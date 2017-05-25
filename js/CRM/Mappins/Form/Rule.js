@@ -6,7 +6,7 @@ CRM.$(function () {
   function openKCFinder() {
     window.KCFinder = {
       callBack: function (url) {
-        CRM.$('input[type="hidden"][name="image_url"]').val(url);
+        CRM.$('input[name="image_url"]').val(url);
         CRM.$('img#mappinsrule-image-preview').attr('src', url);
         window.KCFinder = null;
       }
@@ -25,4 +25,10 @@ CRM.$(function () {
   }
 
   initializeImageKcfinder();
-})
+
+  // In some cases (e.g., form validation failure) the image_url field may 
+  // have a value, while the image button has no src. Fix that.
+  if (!CRM.$('img#mappinsrule-image-preview').attr('src')) {          
+    CRM.$('img#mappinsrule-image-preview').attr('src', CRM.$('input[name="image_url"]').val());
+  }
+});

@@ -19,13 +19,15 @@ class CRM_Mappins_Page_Rule extends CRM_Core_Page_Basic {
   }
 
   public function browse() {
+    // parent::run 2nd argument is $sort, so sort by weight.
+    parent::browse(NULL, 'weight');
+
     CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.mappins', 'js/CRM/Mappins/Page/Rule.js');
     CRM_Core_Resources::singleton()->addStyleFile('com.joineryhq.mappins', 'css/CRM/Mappins/Page/Rule.css');
     CRM_Core_Resources::singleton()->addStyleFile('com.joineryhq.mappins', 'css/CRM/Mappins/common.css');
 
     $this->assign('criteriaOptions', CRM_Mappins_BAO_MappinsRule::getCriteriaOptions());
-    // parent::run 2nd argument is $sort, so sort by weight.
-    parent::browse(NULL, 'weight');
+    $vars = self::$_template->_tpl_vars['rows'];
   }
 
   /**

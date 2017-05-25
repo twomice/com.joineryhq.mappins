@@ -130,4 +130,22 @@ class CRM_Mappins_Upgrader extends CRM_Mappins_Upgrader_Base {
     return TRUE;
   } // */
 
+  /**
+   * Add the uf_group_id column.
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_4701() {
+    $this->ctx->log->info('Update 4701: Add the uf_group_id column.');
+    $sql = "
+      ALTER TABLE `civicrm_mappins_rule`
+        ADD `uf_group_id` varchar(255) DEFAULT NULL COMMENT 'Rule applies only to these profiles. Implicit FK to civicrm_uf_group.id'
+        AFTER  `value`,
+      ADD INDEX ( `uf_group_id` )
+    ";
+    $this->addTask($title, 'executeSql', $sql);
+    return TRUE;
+  }
+
 }

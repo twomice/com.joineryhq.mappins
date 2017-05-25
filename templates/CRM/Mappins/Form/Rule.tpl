@@ -50,23 +50,29 @@
             <span class="description">{ts}The value which the mapped contact must have, for the given criteria, in order for this rule to match.{/ts}</span></td>
         </tr>
         <tr class="crm-relationship-type-form-block-image_url" id="image_url_tr">
-            <td class="label">Image</td>            
+            <td class="label">{$form.image_url.label}</td>            
             <td>
               <a class="button crm-mappins-rule-image-button" id="mappinsrule-image-button" href="#" data-rule-id="{$row.id}">
                 <img id="mappinsrule-image-preview" src="{$image_url}" height="20px" width="20px" />
               </a>
+                <span style="">{$form.image_url.html}</span>
               <br style="clear:both" />
               <span class="description">{ts}The image to use if this rule matches. Click to select/upload an image.{/ts}</span>
               </td>
             </td>              
               
         </tr>
+        <tr class="crm-relationship-type-form-block-uf_group_id">
+            <td class="label">{$form.uf_group_id.label}</td>
+            <td>{$form.uf_group_id.html}<br />
+            <span class="description">{ts}uf_group_id{/ts}</span></td>
+        </tr>
         <tr class="crm-relationship-type-form-block-is_active">
             <td class="label">{$form.is_active.label}</td>
             <td>{$form.is_active.html}<br />
             <span class="description">{ts}Is this rule active?{/ts}</span></td>
         </tr>
-        </table>
+      </table>
     {/if}
     <div class="crm-submit-buttons">{include file="CRM/common/formButtons.tpl" location="bottom"}</div>
 </div>

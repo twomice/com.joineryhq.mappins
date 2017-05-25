@@ -17,6 +17,7 @@
   </field>
   <field>
     <name>criteria</name>
+    <required>true</required>
     <type>varchar</type>
     <length>255</length>
     <add>4.7</add>
@@ -24,13 +25,30 @@
   </field>
   <field>
     <name>value</name>
+    <required>true</required>
     <type>varchar</type>
     <length>255</length>
     <add>4.7</add>
     <comment>Value to filter on</comment>
   </field>
   <field>
+    <name>uf_group_id</name>
+    <title>Profile</title>
+    <pseudoconstant>
+      <callback>CRM_Mappins_BAO_MappinsRule::getUFGroupOptions</callback>
+    </pseudoconstant>
+    <html>
+      <type>Select</type>
+    </html>
+    <type>varchar</type>
+    <length>255</length>
+    <default>NULL</default>
+    <comment>Rule applies only to these profiles. Implicit FK to civicrm_uf_group.id</comment>
+    <add>4.7</add>
+  </field>  
+  <field>
     <name>image_url</name>
+    <required>true</required>
     <type>varchar</type>
     <length>255</length>
     <add>4.7</add>
@@ -56,4 +74,8 @@
     <name>id</name>
     <autoincrement>true</autoincrement>
   </primaryKey>
+  <index>
+    <name>index_uf_group_id</name>
+    <fieldName>uf_group_id</fieldName>
+  </index>
 </table>

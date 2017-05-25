@@ -3,7 +3,12 @@
 require_once 'mappins.civix.php';
 
 function mappins_civicrm_buildForm($formName, &$form) {
-  if ($formName == 'CRM_Contact_Form_Task_Map') {    
+  if ($formName == 'CRM_Contact_Form_Task_Map') {
+    // Determine profile gid.
+    parse_str(html_entity_decode($form->controller->_entryURL), $entryURL);
+    $gid = $entryURL['gid'];
+
+    // Replace map pin images.
     _mappins_replace_tpl_pins();
   }
 }
@@ -12,8 +17,8 @@ function mappins_civicrm_buildForm($formName, &$form) {
  * Apply rules to customize display pins in Smarty template variables.
  */
 function _mappins_replace_tpl_pins() {
-  $tpl = CRM_Core_Smarty::singleton();   
-  foreach($tpl->_tpl_vars['locations'] as &$location) {
+  $tpl = CRM_Core_Smarty::singleton();
+  foreach ($tpl->_tpl_vars['locations'] as &$location) {
     _mappins_set_location_image($location);
   }
 }
@@ -37,7 +42,7 @@ function _mappins_set_location_image(&$location) {
        *   url (String)
        *   location_type (String)
        *   image (String)
-       * 
+       *
        * We can set the pin URL in the 'image' key.
        */
       $location['image'] = $rule['image_url'];
@@ -48,12 +53,12 @@ function _mappins_set_location_image(&$location) {
 
 function _mappins_get_rules() {
   static $rules;
-  if(!isset($rules)) {
+  if (!isset($rules)) {
     $result = civicrm_api3('MappinsRule', 'get', array(
       'is_active' => 1,
       'options' => array(
-        'limit' => 10000, 
-        'sort' => "weight"
+        'limit' => 10000,
+        'sort' => "weight",
       ),
     ));
     $rules = $result['values'];
@@ -80,6 +85,7 @@ function _mappins_location_matches_rule($location, $rule) {
         'group' => array($rule['value'] => 1),
       );
       break;
+
     case 'tag':
       $entity = 'EntityTag';
       $api_params = array(
@@ -88,6 +94,7 @@ function _mappins_location_matches_rule($location, $rule) {
         'tag_id' => $rule['value'],
       );
       break;
+
     case 'contact_sub_type':
       $entity = 'Contact';
       $api_params = array(
@@ -96,13 +103,13 @@ function _mappins_location_matches_rule($location, $rule) {
         'contact_sub_type' => $rule['value'],
       );
       break;
+
     default:
       return FALSE;
-      break;
   }
-  $result = civicrm_api3($entity, 'get', $api_params);  
-  return (CRM_Utils_Array::value('count', $result, 0) == 1);
-  
+  $result = civicrm_api3($entity, 'get', $api_params);
+  $is_match = (CRM_Utils_Array::value('count', $result, 0) == 1);
+  return $is_match;
 }
 
 /**
@@ -232,27 +239,25 @@ function mappins_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_preProcess
  *
-function mappins_civicrm_preProcess($formName, &$form) {
+  function mappins_civicrm_preProcess($formName, &$form) {
 
-} // */
-
+  } // */
 /**
  * Implements hook_civicrm_navigationMenu().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
  *
-function mappins_civicrm_navigationMenu(&$menu) {
+  function mappins_civicrm_navigationMenu(&$menu) {
   _mappins_civix_insert_navigation_menu($menu, NULL, array(
-    'label' => ts('The Page', array('domain' => 'com.joineryhq.mappins')),
-    'name' => 'the_page',
-    'url' => 'civicrm/the-page',
-    'permission' => 'access CiviReport,access CiviContribute',
-    'operator' => 'OR',
-    'separator' => 0,
+  'label' => ts('The Page', array('domain' => 'com.joineryhq.mappins')),
+  'name' => 'the_page',
+  'url' => 'civicrm/the-page',
+  'permission' => 'access CiviReport,access CiviContribute',
+  'operator' => 'OR',
+  'separator' => 0,
   ));
   _mappins_civix_navigationMenu($menu);
-} // */
-
+  } // */
 
 /**
  * Implements hook_civicrm_entityTypes().
@@ -283,7 +288,6 @@ function mappins_civicrm_navigationMenu(&$menu) {
   ));
   _mappins_civix_navigationMenu($menu);
 }
-
 
 /**
  * For an array of menu items, recursively get the value of the greatest navID
