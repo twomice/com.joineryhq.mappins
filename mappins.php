@@ -9,7 +9,7 @@ function mappins_civicrm_buildForm($formName, &$form) {
   if ($formName == 'CRM_Contact_Form_Task_Map') {
     // Determine profile gid.
     parse_str(html_entity_decode($form->controller->_entryURL), $entryURL);
-    $gid = $entryURL['gid'];
+    $gid = CRM_Utils_Array::value('gid', $entryURL);
 
     // Instantiate a map object and replace the pins, being sure to convey the
     // Profile gid so that only rules for this profile are applied.

@@ -14,8 +14,6 @@ class CRM_Mappins_BAO_MappinsRule extends CRM_Mappins_DAO_MappinsRule {
 
     // Compress uf_group_id to a padded string for storage.
     $params['uf_group_id'] = CRM_Utils_Array::implodePadded(CRM_Utils_Array::value($params, 'uf_group_id'));
-    // Set is_active to FALSE if not given.
-    $params['is_active'] = CRM_Utils_Array::value('is_active', $params, FALSE);
 
     $hook = empty($params['id']) ? 'create' : 'edit';
 

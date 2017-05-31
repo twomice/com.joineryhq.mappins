@@ -156,6 +156,11 @@ class CRM_Mappins_MappinsMap {
         break;
 
       case 'tag':
+        $tags = CRM_Contact_BAO_Contact::buildOptions('tag');
+        if (!array_key_exists($rule['value'], $tags)) {
+          return FALSE;
+        }
+
         $entity = 'EntityTag';
         $api_params = array(
           'entity_id' => $contact_id,
@@ -165,6 +170,10 @@ class CRM_Mappins_MappinsMap {
         break;
 
       case 'contact_sub_type':
+        $subtypes = CRM_Contact_BAO_Contact::buildOptions('contact_sub_type', 'create');
+        if (!in_array($rule['value'], $subtypes)) {
+          return FALSE;
+        }
         $entity = 'Contact';
         $api_params = array(
           'status' => "Added",
