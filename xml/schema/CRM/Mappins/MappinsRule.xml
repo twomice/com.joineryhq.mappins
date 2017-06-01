@@ -32,21 +32,6 @@
     <comment>Value to filter on</comment>
   </field>
   <field>
-    <name>uf_group_id</name>
-    <title>Profile</title>
-    <pseudoconstant>
-      <callback>CRM_Mappins_BAO_MappinsRule::getUFGroupOptions</callback>
-    </pseudoconstant>
-    <html>
-      <type>Select</type>
-    </html>
-    <type>varchar</type>
-    <length>255</length>
-    <default>NULL</default>
-    <comment>Rule applies only to these profiles. Implicit FK to civicrm_uf_group.id</comment>
-    <add>4.7</add>
-  </field>  
-  <field>
     <name>image_url</name>
     <required>true</required>
     <type>varchar</type>
@@ -62,20 +47,8 @@
     <comment>Is this mappins_rule enabled</comment>
     <add>4.7</add>
   </field>
-  <field>
-    <name>weight</name>
-    <title>Order</title>
-    <type>int</type>
-    <default>1</default>
-    <comment>Relative order of this mappins_rule; lowest weights sort first.</comment>
-    <add>4.7</add>
-  </field>
   <primaryKey>
     <name>id</name>
     <autoincrement>true</autoincrement>
   </primaryKey>
-  <index>
-    <name>index_uf_group_id</name>
-    <fieldName>uf_group_id</fieldName>
-  </index>
 </table>

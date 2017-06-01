@@ -5,8 +5,8 @@
 return array(
   0 =>
   array(
-    'name' => 'MappinsRule',
-    'class' => 'CRM_Mappins_DAO_MappinsRule',
-    'table' => 'civicrm_mappins_rule',
+    'name' => 'MappinsRuleProfile',
+    'class' => 'CRM_Mappins_DAO_MappinsRuleProfile',
+    'table' => 'civicrm_mappinsruleprofile',
   ),
 );

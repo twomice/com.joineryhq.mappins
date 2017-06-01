@@ -1,4 +1,15 @@
 <?php
+//TODO: make the per-profile stuff work like this:
+// * 1. Weight is per-profile-per-rule
+// * 2. a rule can apply to more than one profile, and have a different weight per profile
+// * 3. "all profiles" = "profile 0"
+// * 4. The UI includes two lists:
+// *    rules-per-profile: shows only rules for a given profile; allows drag-and-drop weight settings
+// *    all rules: shows all rules; includes a column for "profiles" (clickable to rules-per-profile list); doesn't allow drag-and-drop weight settings.
+// * 5. new table: mappins_rule_profile(id, rule_id, uf_group_id, weight)
+// * 6. remove `weight` and `uf_group_id` columns from `mappins` table.
+// *
+// * NOTE: ignore back-compatibility; this is alpha, so breaking changes without smooth upgrade path are fine.
 
 require_once 'mappins.civix.php';
 
@@ -158,6 +169,11 @@ function mappins_civicrm_entityTypes(&$entityTypes) {
     'name' => 'MappinsRule',
     'class' => 'CRM_Mappins_DAO_MappinsRule',
     'table' => 'civicrm_mappins_rule',
+  );
+  $entityTypes['CRM_Mappins_DAO_MapppinsRuleProfile'] = array(
+    'name' => 'MappinsRuleProfile',
+    'class' => 'CRM_Mappins_DAO_MappinsRuleProfile',
+    'table' => 'civicrm_mappins_rule_profile',
   );
 }
 

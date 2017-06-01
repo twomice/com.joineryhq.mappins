@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<table>
+  <base>CRM/Mappins</base>
+  <class>MappinsRuleProfile</class>
+  <name>civicrm_mappins_rule_profile</name>
+  <comment>FIXME</comment>
+  <add>4.7</add>
+  <log>true</log>
+
+  <field>
+    <name>id</name>
+    <type>int unsigned</type>
+    <required>true</required>
+    <comment>Unique MappinsRuleProfile ID</comment>
+    <add>4.7</add>
+  </field>
+  <field>
+    <name>rule_id</name>
+    <title>Rule</title>
+    <pseudoconstant>
+      <callback>CRM_Mappins_BAO_MappinsRule::getRuleOptions</callback>
+    </pseudoconstant>
+    <html>
+      <type>Select</type>
+    </html>
+    <type>int unsigned</type>
+    <required>true</required>
+    <comment>FK to civicrm_mappins_rule.id</comment>
+    <add>4.7</add>
+  </field>
+  <field>
+    <name>uf_group_id</name>
+    <title>Profile</title>
+    <pseudoconstant>
+      <callback>CRM_Mappins_BAO_MappinsRule::getUFGroupOptions</callback>
+    </pseudoconstant>
+    <html>
+      <type>Select</type>
+    </html>
+    <type>int unsigned</type>
+    <required>true</required>
+    <comment>Rule applies only to these profiles. Implicit FK to civicrm_uf_group.id</comment>
+    <add>4.7</add>
+  </field>
+  <field>
+    <name>weight</name>
+    <title>Order</title>
+    <type>int</type>
+    <default>1</default>
+    <comment>Relative order of this mappins_rule; lowest weights sort first.</comment>
+    <add>4.7</add>
+  </field>
+  
+  <primaryKey>
+    <name>id</name>
+    <autoincrement>true</autoincrement>
+  </primaryKey>
+
+  <foreignKey>
+    <name>rule_id</name>
+    <table>civicrm_mappins_rule</table>
+    <key>id</key>
+    <add>4.7</add>
+    <onDelete>CASCADE</onDelete>
+  </foreignKey>
+  <foreignKey>
+    <name>uf_group_id</name>
+    <table>civicrm_uf_group</table>
+    <key>id</key>
+    <add>4.7</add>
+    <onDelete>CASCADE</onDelete>
+  </foreignKey>
+  <index>
+    <name>index_rule_id</name>
+    <fieldName>rule_id</fieldName>
+  </index>
+  <index>
+    <name>index_uf_group_id</name>
+    <fieldName>uf_group_id</fieldName>
+  </index>
+
+
+</table>
