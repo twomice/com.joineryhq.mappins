@@ -1,0 +1,37 @@
+<div class="crm-container">
+<button crm-icon="fa-plus-circle" ng-click="openRuleForm();">Add Rule</button>
+  <div crm-ui-debug="profiles"></div>
+  <h1 crm-page-title>{{ts('Map Pin Rules')}}</h1>
+
+  <div crm-ui-tab-set>
+    <div id="mappinsRule-tab-perProfile" crm-ui-tab crm-title="ts('Per Profile')">
+      <label for="profile">Profile</label>
+      <select id="profile" ng-model="selectedProfile" ng-options="profile.title for (key, profile) in profiles | orderBy:'title'" ng-change="setSelectedProfile(selectedProfile); loadSelectedProfileRules();"></select>
+      <div crm-ui-debug="selectedProfile"></div>
+      <!--
+      <table class="display">
+        <thead>
+          <tr>
+            <th><a href="" crm-ui-order-by="[installedOrder,'name']">{{ts('ID')}}</a></th>
+            <th><a href="" crm-ui-order-by="[installedOrder,'version']">{{ts('Criteria')}}</a></th>
+            <th><a href="" crm-ui-order-by="[installedOrder,'develStage']">{{ts('Value')}}</a></th>
+            <th><a href="" crm-ui-order-by="[installedOrder,'status']">{{ts('Image')}}</a></th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr 
+            ng-repeat="(key, value) in selectedProfile | orderBy:installedOrder.get()"
+            ng-class="'crmExt-blockExtensionRow-status-' + value.status"
+            ng-include="'~/crmExt/BlockExtensionRow.html'"
+            ng-init="viewName = 'installed'"
+          ></tr>
+        </tbody>
+      </table>
+-->
+    </div>
+    <div id="mappinsRule-tab-all" crm-ui-tab crm-title="ts('All')">
+      all
+    </div>
+  </div>
+</div>
