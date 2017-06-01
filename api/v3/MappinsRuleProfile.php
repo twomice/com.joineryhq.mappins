@@ -48,6 +48,6 @@ function civicrm_api3_mappins_rule_profile_get($params) {
 /**
  * Get DAO name
  */
-function _civicrm_api3_mappins_rule_DAO() {
+function _civicrm_api3_mappins_rule_profile_DAO() {
   return 'CRM_Mappins_DAO_MappinsRuleProfile';
 }
