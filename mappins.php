@@ -26,6 +26,7 @@ function mappins_civicrm_buildForm($formName, &$form) {
     // Profile gid so that only rules for this profile are applied.
     $map = new CRM_Mappins_MappinsMap();
     $map->setGid($gid);
+    $rules = $map->getRules();
     $map->replaceLocationPins();
   }
 }

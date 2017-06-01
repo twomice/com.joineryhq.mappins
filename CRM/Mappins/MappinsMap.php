@@ -54,30 +54,11 @@ class CRM_Mappins_MappinsMap {
   public function getRules() {
     if (!isset($this->rules)) {
       $this->rules = array();
-      $params = array(
-        'is_active' => 1,
-        'options' => array(
-          'limit' => 0,
-          'sort' => "weight",
-        ),
-      );
+      
       if ($this->gid) {
-        $params['uf_group_id'] = array(
-          'LIKE' => '%' . CRM_Utils_Array::implodePadded(array($this->gid)) . '%',
-        );
-        $result = civicrm_api3('MappinsRule', 'get', $params);
-        $this->rules = $result['values'];
-
-        $params['uf_group_id'] = array(
-          'IS NULL' => 1,
-        );
-        $result = civicrm_api3('MappinsRule', 'get', $params);
-        $this->rules = array_merge($this->rules, $result['values']);
+        $this->rules = self::getRulesPerProfile($this->gid);
       }
-      else {
-        $result = civicrm_api3('MappinsRule', 'get', $params);
-        $this->rules = $result['values'];
-      }
+      $this->rules = array_merge($this->rules, self::getRulesPerProfile(NULL));
     }
     return $this->rules;
   }
@@ -190,4 +171,32 @@ class CRM_Mappins_MappinsMap {
     return $is_match;
   }
 
+  private static function getRulesPerProfile($gid = NULL) {
+    $rules = array();
+    $params = array(
+      'options' => array(
+        'limit' => 0,
+        'sort' => "weight",
+      ),
+    );
+    if ($gid === NULL) {
+      $params['uf_group_id'] = array('IS NULL' => 1);
+    }
+    else {
+      $params['uf_group_id'] = $gid;
+    }
+    
+    $rule_profile_result = civicrm_api3('MappinsRuleProfile', 'get', $params);
+    if ($rule_profile_result['count']) {
+      foreach ($rule_profile_result['values'] as $value) {
+        $id = $value['id'];
+        $rule_result = civicrm_api3('MappinsRule', 'get', array('id' => $id));
+        $rules[] = $rule_result['values'][$id];            
+      }
+    }
+
+    return $rules;
+    
+  }
+  
 }
