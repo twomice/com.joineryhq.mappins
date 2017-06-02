@@ -23,62 +23,47 @@
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('mappins');
     var hs = $scope.hs = crmUiHelp({file: 'CRM/mappins/rules'}); // See: templates/CRM/mappins/rules.hlp
-
-    var apiProfiles = crmApi('uf_group', 'get', {
-      return: ['id', 'title'],
-      sequential: 1
-    });
-    $q.all([apiProfiles])
-    .then(function(values){
-      profiles = values[0].values;
-      profiles.push({
-        'id': 0,
-        'title': '(All profiles)'
-      });
-      $scope.profiles = profiles;
-      $scope.selectedProfile = {};
-    });
     
     $scope.setSelectedProfile = function setSelectedProfile(profile) {
       $scope.selectedProfile = profile;
     }
     
     $scope.loadSelectedProfileRules = function loadSelectedProfileRules() {
-      var rules = [];
       
-      var params = {
+      var baseParams = {
         "options": {
           "limit": 0,
           "sort": "weight"
         }
       }
-      if ($scope.selectedProfile.id == 0) {
-        params.uf_group_id = {"IS NULL":1};
+      if ($scope.selectedProfile.id > 0) {
+        selectedProfileParams = baseParams;
+        selectedProfileParams.uf_group_id = $scope.selectedProfile.id;
+        var apiProfiles = crmApi('MappinsRuleProfile', 'get', selectedProfileParams);
+        $q.all([apiProfiles])
+        .then(function(values){
+          $scope.rules.selectedProfile = $.map(values[0].values, function(value, index) {
+            return [value];
+          });
+          $scope.rules.selectedProfile.sort(function(a, b){
+            return a.weight > b.weight;
+          })
+        });      
       }
-      else {
-        params.uf_group_id = {"IS NULL":1};
-        $scope.selectedProfile.id;
-      }
-
-      var apiProfiles = crmApi('MappinsRuleProfile', 'get', params);
-
-      $q.all([apiProfiles])
+      
+      unassignedParams = baseParams;
+      unassignedParams.uf_group_id = {"IS NULL":1};
+      var apiUnassigned = crmApi('MappinsRuleProfile', 'get', unassignedParams);
+      $q.all([apiUnassigned])
       .then(function(values){
-        profiles = values[0].values;
-        profiles.push({
-          'id': 0,
-          'title': '(All profiles)'
+        $scope.rules.unassigned = $.map(values[0].values, function(value, index) {
+          return [value];
         });
-        $scope.profiles = profiles;
-        $scope.selectedProfile = {};
+        $scope.rules.unassigned.sort(function(a, b){
+          return a.weight > b.weight;
+        })
       });      
-      if ($rule_profile_result['count']) {
-        foreach ($rule_profile_result['values'] as $value) {
-          $id = $value['id'];
-          $rule_result = civicrm_api3('MappinsRule', 'get', array('id' => $id));
-          $rules[] = $rule_result['values'][$id];            
-        }
-      }
+
       
     }
     
@@ -117,5 +102,71 @@
       }
       $timeout(setOverlayButtons)
     }
+    
+    $scope.saveWeights = function saveWeights(e, ui) {
+      if (e.target.id == 'selectedProfileRules') {
+        model = $scope.rules.selectedProfile;
+      }
+      else if (e.target.id == 'unassignedRules') {
+        model = $scope.rules.unassigned;
+      }
+      for (var i in model) {
+        var id = model[i].id;
+        var params = {
+          'id': id,
+          'weight': i
+        };
+        var a = CRM.api3('MappinsRuleProfile', 'create', params, ts('Order saved'));
+      }
+    }
+    
+    $scope.openKCFinder = function openKCFinder() {
+      var field = this;
+      window.KCFinder = {
+        callBack: function (url) {
+          console.log('url', url);
+          return;
+          
+          var ruleId = CRM.$(field).attr('data-rule-id');
+          CRM.$('img#crm-mappinsrule-image-'+ ruleId).attr('src', url);
+          window.KCFinder = null;
+
+          saveRuleImageUrl(ruleId, url);
+        }
+      };
+
+      window.open(
+        '/sites/all/modules/civicrm/packages/kcfinder/browse.php?cms=civicrm&type=images',
+        'kcfinder_textbox_image_url',
+        'status=0, toolbar=0, location=0, menubar=0, directories=0, resizable=1, scrollbars=0, width=800, height=600'
+      );
+    }
+    
+    var apiProfiles = crmApi('uf_group', 'get', {
+      return: ['id', 'title'],
+      sequential: 1
+    });
+    $q.all([apiProfiles])
+    .then(function(values){
+      profiles = values[0].values;
+      profiles.push({
+        'id': 0,
+        'title': '(All profiles / fallback)'
+      });
+      $scope.profiles = profiles;
+      // Set the page to start with "All profiles / fallback":
+      $scope.selectedProfile = _.findWhere($scope.profiles, {'id': '16'});
+      $scope.loadSelectedProfileRules();
+    });
+    
+    $scope.rules = {};
+    $scope._ = _;
+    window.scope = $scope;
+  
+    
   });
+  
+  
 })(angular, CRM.$, CRM._);
+
+

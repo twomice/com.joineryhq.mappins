@@ -1,0 +1,16 @@
+<td>
+  {{value.rule_id}}
+</td>
+<td>
+  {{value.criteria}}
+</td>
+<td>
+  {{value.value}}
+</td>
+<td>
+  <a class="button crm-mappins-rule-image-button" href="#" data-rule-id="{{value.rule_id}}" ng-click="openKCFinder">
+    <img class="crm-mappins-rule-image" id="crm-mappinsrule-image-{{value.rule_id}}" src="{{value.image_url}}" height="20px" width="20px" />
+  </a>
+</td>
+<td ng-include="'~/mappins/blockRuleActionLinks.html'" ng-init="rule = value">
+</td>

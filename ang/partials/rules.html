@@ -7,28 +7,60 @@
     <div id="mappinsRule-tab-perProfile" crm-ui-tab crm-title="ts('Per Profile')">
       <label for="profile">Profile</label>
       <select id="profile" ng-model="selectedProfile" ng-options="profile.title for (key, profile) in profiles | orderBy:'title'" ng-change="setSelectedProfile(selectedProfile); loadSelectedProfileRules();"></select>
+      <div crm-ui-debug="rules.selectedProfile"></div>
       <div crm-ui-debug="selectedProfile"></div>
-      <!--
-      <table class="display">
-        <thead>
-          <tr>
-            <th><a href="" crm-ui-order-by="[installedOrder,'name']">{{ts('ID')}}</a></th>
-            <th><a href="" crm-ui-order-by="[installedOrder,'version']">{{ts('Criteria')}}</a></th>
-            <th><a href="" crm-ui-order-by="[installedOrder,'develStage']">{{ts('Value')}}</a></th>
-            <th><a href="" crm-ui-order-by="[installedOrder,'status']">{{ts('Image')}}</a></th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr 
-            ng-repeat="(key, value) in selectedProfile | orderBy:installedOrder.get()"
-            ng-class="'crmExt-blockExtensionRow-status-' + value.status"
-            ng-include="'~/crmExt/BlockExtensionRow.html'"
-            ng-init="viewName = 'installed'"
-          ></tr>
-        </tbody>
-      </table>
--->
+      <div crm-ui-debug="selectedProfile.hasOwnProperty('id')"></div>
+      <span crm-ui-order="{var: 'byProfleOrder', 'defaults': ['weight'] }"></span>
+      <div ng-if="selectedProfile.id > 0">
+        <h2>This profile considers these assigned rules first:</h2>
+        <div ng-if="_.isEmpty(rules.selectedProfile)">
+          (No rules found for this profile.)
+        </div>
+        <table class="display" ng-if="! _.isEmpty(rules.selectedProfile)">
+          <thead>
+            <tr>
+              <th>{{ts('ID')}}</th>
+              <th>{{ts('Criteria')}}</th>
+              <th>{{ts('Value')}}</th>
+              <th>{{ts('Image')}}</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody ui-sortable="{stop: saveWeights}" ng-model="rules.selectedProfile" id="selectedProfileRules">
+            <tr             
+              ng-repeat="(key, value) in rules.selectedProfile"
+              ng-class="'mappins-blockRuleRow-status-' + value.is_active"
+              ng-include="'~/mappins/blockRuleRow.html'"
+              ng-init="viewName = 'byProfile'"
+            ></tr>
+          </tbody>
+        </table>        
+      </div>
+      <div ng-if="! _.isEmpty(rules.unassigned)">
+        <h2>All profiles fall back to these unassigned rules:</h2>
+        <table class="display">
+          <thead>
+            <tr>
+              <th>{{ts('ID')}}</th>
+              <th>{{ts('Criteria')}}</th>
+              <th>{{ts('Value')}}</th>
+              <th>{{ts('Image')}}</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <!--
+          <tbody ui-sortable="{update: saveWeights}" ng-model="rules.unassigned" id="unassignedRules">
+          -->
+          <tbody ui-sortable="{stop: saveWeights}" ng-model="rules.unassigned" id="unassignedRules">
+            <tr             
+              ng-repeat="(key, value) in rules.unassigned"
+              ng-class="'mappins-blockRuleRow-status-' + value.is_active"
+              ng-include="'~/mappins/blockRuleRow.html'"
+              ng-init="viewName = 'byProfile'"
+            ></tr>
+          </tbody>
+        </table>        
+      </div>
     </div>
     <div id="mappinsRule-tab-all" crm-ui-tab crm-title="ts('All')">
       all
