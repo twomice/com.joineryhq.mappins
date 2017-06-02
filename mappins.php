@@ -188,7 +188,7 @@ function mappins_civicrm_navigationMenu(&$menu) {
   _mappins_civix_insert_navigation_menu($menu, 'Administer/Customize Data and Screens', array(
     'label' => ts('Map Pins', array('domain' => 'com.joineryhq.mappins')),
     'name' => 'Map Pins',
-    'url' => 'civicrm/admin/mappins/rule?reset=1',
+    'url' => 'civicrm/a/#/mappins/rules',
     'permission' => 'administer CiviCRM',
     'operator' => 'AND',
     'separator' => NULL,

@@ -187,15 +187,7 @@ class CRM_Mappins_MappinsMap {
     }
     
     $rule_profile_result = civicrm_api3('MappinsRuleProfile', 'get', $params);
-    if ($rule_profile_result['count']) {
-      foreach ($rule_profile_result['values'] as $value) {
-        $id = $value['id'];
-        $rule_result = civicrm_api3('MappinsRule', 'get', array('id' => $id));
-        $rules[] = $rule_result['values'][$id];            
-      }
-    }
-
-    return $rules;
+    return $rule_profile_result['values'];
     
   }
   

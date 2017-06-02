@@ -43,9 +43,43 @@
       $scope.selectedProfile = profile;
     }
     
-    $scope.loadSelectedProfileRules = function() {
-      alert('fixme: loadSelectedProfileRules()')
-      console.log('$scope.selectedProfile', $scope.selectedProfile);
+    $scope.loadSelectedProfileRules = function loadSelectedProfileRules() {
+      var rules = [];
+      
+      var params = {
+        "options": {
+          "limit": 0,
+          "sort": "weight"
+        }
+      }
+      if ($scope.selectedProfile.id == 0) {
+        params.uf_group_id = {"IS NULL":1};
+      }
+      else {
+        params.uf_group_id = {"IS NULL":1};
+        $scope.selectedProfile.id;
+      }
+
+      var apiProfiles = crmApi('MappinsRuleProfile', 'get', params);
+
+      $q.all([apiProfiles])
+      .then(function(values){
+        profiles = values[0].values;
+        profiles.push({
+          'id': 0,
+          'title': '(All profiles)'
+        });
+        $scope.profiles = profiles;
+        $scope.selectedProfile = {};
+      });      
+      if ($rule_profile_result['count']) {
+        foreach ($rule_profile_result['values'] as $value) {
+          $id = $value['id'];
+          $rule_result = civicrm_api3('MappinsRule', 'get', array('id' => $id));
+          $rules[] = $rule_result['values'][$id];            
+        }
+      }
+      
     }
     
     $scope.openRuleForm = function openRuleForm(rule) {
