@@ -29,16 +29,21 @@
           <tbody ui-sortable="{stop: saveWeights}" ng-model="rules.selectedProfile" id="selectedProfileRules">
             <tr             
               ng-repeat="(key, value) in rules.selectedProfile"
-              ng-class="'mappins-blockRuleRow-status-' + value.is_active"
+              ng-class="(value.is_active == 0 ? 'disabled' : '')"
               ng-include="'~/mappins/blockRuleRow.html'"
-              ng-init="viewName = 'byProfile'"
+              ng-init="viewName = 'selectedProfile'"
+              ng-class-even="'even-row'"
+              ng-class-odd="'odd-row'"
             ></tr>
           </tbody>
         </table>        
       </div>
-      <div ng-if="! _.isEmpty(rules.unassigned)">
+      <div ng-if="(selectedProfile.id == 0 || ! _.isEmpty(rules.unassigned))">
         <h2>All profiles fall back to these unassigned rules:</h2>
-        <table class="display">
+        <div ng-if="_.isEmpty(rules.unassigned)">
+          (No fallback rules found.)
+        </div>
+        <table class="display" ng-if="! _.isEmpty(rules.unassigned)">
           <thead>
             <tr>
               <th>{{ts('ID')}}</th>
@@ -54,9 +59,11 @@
           <tbody ui-sortable="{stop: saveWeights}" ng-model="rules.unassigned" id="unassignedRules">
             <tr             
               ng-repeat="(key, value) in rules.unassigned"
-              ng-class="'mappins-blockRuleRow-status-' + value.is_active"
+              ng-class="(value.is_active == 0 ? 'disabled' : '')"
               ng-include="'~/mappins/blockRuleRow.html'"
-              ng-init="viewName = 'byProfile'"
+              ng-init="viewName = 'unassigned'"
+              ng-class-even="'even-row'"
+              ng-class-odd="'odd-row'"
             ></tr>
           </tbody>
         </table>        

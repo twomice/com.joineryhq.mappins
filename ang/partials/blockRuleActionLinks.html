@@ -1,6 +1,6 @@
 <a 
   ng-click="rule.edit();"
-  class="action-item crm-hover-button" href=""
+  class="action-item crm-hover-button" href=""  
 >
   Edit
 </a>
@@ -26,7 +26,7 @@
 <a
   class="action-item crm-hover-button"
   href=""
-  crm-confirm="{message: ts('Delete <em>Rule %1</em> from all profiles?', {1: rule.rule_id})}" on-yes="rule.delete();"
+  crm-confirm="{message: ts('Delete <em>Rule %1</em> from all profiles?', {1: rule.rule_id})}" on-yes="rule.del($index, viewName);"
 >
   Delete
 </a>

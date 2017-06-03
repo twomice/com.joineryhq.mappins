@@ -23,13 +23,74 @@
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('mappins');
     var hs = $scope.hs = crmUiHelp({file: 'CRM/mappins/rules'}); // See: templates/CRM/mappins/rules.hlp
+
+    /**
+     * Add action-link methods to the given rule object. These methods
+     * will be called by click events in the UI, for example, "Enable" or "Delete".
+     *
+     * @param obj An object defining a rule, in the same format as one
+     *   provided by, for example, crmApi('MappinsRule', 'getsingle').
+     */
+    var addActionMethods = function addActionMethods(obj) {
+      obj.edit = function edit() {
+        $scope.openRuleForm(this);    
+      };
+      
+      obj.disable = function disable() {
+        rule = this;
+        return crmStatus(
+          // Status messages. For defaults, just use "{}"
+          {start: ts('Disabling...'), success: ts('Disabled')},
+          crmApi('MappinsRule', 'create', {
+            id: rule.rule_id,
+            is_active: 0
+          })
+        )
+        .then(function(result){
+          rule.is_active = 0;            
+        });
+      };
+      
+      obj.enable = function enable() {
+        rule = this;
+        return crmStatus(
+          // Status messages. For defaults, just use "{}"
+          {start: ts('Enabling...'), success: ts('Enabled')},
+          crmApi('MappinsRule', 'create', {
+            id: rule.rule_id,
+            is_active: 1
+          })
+        )
+        .then(function(result){
+          rule.is_active = 1;            
+        });
+      };
+      
+      obj.del = function del(index, viewName) {
+        rule = this;
+        console.log('index', index)
+        console.log(', viewName', viewName)
+//        $scope.rules[viewName].splice(index, 1);
+        
+        return crmStatus(
+          // Status messages. For defaults, just use "{}"
+          {start: ts('Deleting...'), success: ts('Deleted')},
+          crmApi('MappinsRule', 'delete', {
+            id: rule.rule_id,
+          })
+        )
+        .then(function(result) {
+          $scope.loadSelectedProfileRules();
+        });
+      };
+    };
+
     
     $scope.setSelectedProfile = function setSelectedProfile(profile) {
       $scope.selectedProfile = profile;
     }
     
     $scope.loadSelectedProfileRules = function loadSelectedProfileRules() {
-      
       var baseParams = {
         "options": {
           "limit": 0,
@@ -42,12 +103,17 @@
         var apiProfiles = crmApi('MappinsRuleProfile', 'get', selectedProfileParams);
         $q.all([apiProfiles])
         .then(function(values){
-          $scope.rules.selectedProfile = $.map(values[0].values, function(value, index) {
+          var rules = $.map(values[0].values, function(value, index) {
             return [value];
           });
-          $scope.rules.selectedProfile.sort(function(a, b){
+          rules.sort(function(a, b){
             return a.weight > b.weight;
           })
+          rules = _.each(rules, function(obj){
+            addActionMethods(obj)
+          })
+          
+          $scope.rules.selectedProfile = rules;
         });      
       }
       
@@ -56,13 +122,19 @@
       var apiUnassigned = crmApi('MappinsRuleProfile', 'get', unassignedParams);
       $q.all([apiUnassigned])
       .then(function(values){
-        $scope.rules.unassigned = $.map(values[0].values, function(value, index) {
+        var rules = $.map(values[0].values, function(value, index) {
           return [value];
         });
-        $scope.rules.unassigned.sort(function(a, b){
+        rules.sort(function(a, b){
           return a.weight > b.weight;
+        })        
+        rules = _.each(rules, function(obj){
+          addActionMethods(obj)
         })
+        
+        $scope.rules.unassigned = rules;
       });      
+
 
       
     }
@@ -79,7 +151,12 @@
         autoOpen: false,
         title: title
       });
-      dialogService.open('mappins-rule-create', '~/mappins/ruleFormCtrl.html', rule, options)
+      
+      var model = {
+        rule: rule,
+        profiles: $scope.profiles
+      };
+      dialogService.open('mappins-rule-form', '~/mappins/ruleFormCtrl.html', model, options)
       
       var setOverlayButtons = function setOverlayButtons() {
         var buttons = [
@@ -87,18 +164,18 @@
             text: ts('Save'),
             click: function() {
               alert('fixme: save button');
-              dialogService.close('mappins-rule-create');
+              dialogService.close('mappins-rule-form');
             }
           },
           {
             text: ts('Cancel'),
             icons: {primary: 'fa-times'},
             click: function() {
-              dialogService.cancel('mappins-rule-create');
+              dialogService.cancel('mappins-rule-form');
             }
           }
         ]
-        dialogService.setButtons('mappins-rule-create', buttons);
+        dialogService.setButtons('mappins-rule-form', buttons);
       }
       $timeout(setOverlayButtons)
     }
@@ -116,22 +193,24 @@
           'id': id,
           'weight': i
         };
-        var a = CRM.api3('MappinsRuleProfile', 'create', params, ts('Order saved'));
+        CRM.api3('MappinsRuleProfile', 'create', params, ts('Order saved'));
       }
     }
     
-    $scope.openKCFinder = function openKCFinder() {
-      var field = this;
+    $scope.openKCFinder = function openKCFinder(e, index, viewName) {
+      e.preventDefault();
       window.KCFinder = {
         callBack: function (url) {
-          console.log('url', url);
-          return;
-          
-          var ruleId = CRM.$(field).attr('data-rule-id');
-          CRM.$('img#crm-mappinsrule-image-'+ ruleId).attr('src', url);
           window.KCFinder = null;
-
-          saveRuleImageUrl(ruleId, url);
+          console.log('rule', $scope.rules[viewName][index]);
+          $scope.rules[viewName][index].image_url = url;
+          $scope.$apply();
+          
+          params = {
+            'id': $scope.rules[viewName][index].rule_id,
+            'image_url': url
+          };
+          CRM.api3('MappinsRule', 'create', params, ts('Image saved'));
         }
       };
 
@@ -141,6 +220,7 @@
         'status=0, toolbar=0, location=0, menubar=0, directories=0, resizable=1, scrollbars=0, width=800, height=600'
       );
     }
+    
     
     var apiProfiles = crmApi('uf_group', 'get', {
       return: ['id', 'title'],
