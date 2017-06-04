@@ -85,6 +85,11 @@
       };
     };
 
+    $scope.criteriaOptions = {
+      'contact_sub_type': ts('Contact Sub Type'),
+      'group': ts('Group ID'),
+      'tag': ts('Tag ID'),
+    };    
     
     $scope.setSelectedProfile = function setSelectedProfile(profile) {
       $scope.selectedProfile = profile;

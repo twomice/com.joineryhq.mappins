@@ -55,6 +55,7 @@
     
     if (_.isObject(mappinsRuleProfiles)) {
       $scope.rule = mappinsRuleProfiles.values[0];
+      $scope.rule.id = $scope.rule.rule_id;
       var uf_group_ids = [];
       for (i in mappinsRuleProfiles.values) {
         uf_group_ids.push(mappinsRuleProfiles.values[i].uf_group_id);
@@ -65,23 +66,29 @@
       $scope.rule = {};
     }
     
+    $scope.criteriaOptions = {
+      'contact_sub_type': ts('Contact Sub Type'),
+      'group': ts('Group ID'),
+      'tag': ts('Tag ID'),
+    };    
+    
     // Pass $window service so we can use it in Cancel button ng-click.
     $scope.cancel = function cancel() {
       $window.history.back();
     };
-    
-//    $scope.save = function save() {
-//      return crmStatus(
-//        // Status messages. For defaults, just use "{}"
-//        {start: ts('Saving...'), success: ts('Saved')},
-//        // The save action. Note that crmApi() returns a promise.
-//        crmApi('Contact', 'create', {
-//          id: myContact.id,
-//          first_name: myContact.first_name,
-//          last_name: myContact.last_name
-//        })
-//      );
-//    };
+
+    $scope.save = function save() {
+      return crmStatus(
+        // Status messages. For defaults, just use "{}"
+        {start: ts('Saving...'), success: ts('Saved')},
+        // The save action. Note that crmApi() returns a promise.
+        crmApi('MappinsRule', 'create', $scope.rule)
+        .then(function(values) {
+          console.log('values', values)
+          $window.history.back();                  
+        })
+      );
+    };
 
     $scope.openKCFinder = function openKCFinder(index, viewName) {
       window.KCFinder = {

@@ -11,7 +11,13 @@
     </tr>
     <tr class="crm-relationship-type-form-block-criteria">
         <td class="label">{{ts('Criteria')}}</td>
-        <td><input type="text" ng-model="rule.criteria"><br />
+        <td>
+          <select
+            required
+            ng-model="rule.criteria"
+            ng-options="key as value for (key, value) in criteriaOptions | orderBy:'label'"
+          >
+          </select><br />          
         <span class="description">{{ts('The attribute of the mapped contact to check.')}}</span></td>
     </tr>
     <tr class="crm-relationship-type-form-block-value">
@@ -44,7 +50,6 @@
             multiple 
             ui-jq="select2"
             ui-options="{dropdownAutoWidth : true}"
-            ng-model="rule.uf_group_id" 
             required
             id="uf_group_id"
             ng-model="rule.uf_group_id"

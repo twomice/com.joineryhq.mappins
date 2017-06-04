@@ -18,9 +18,6 @@
   <field>
     <name>rule_id</name>
     <title>Rule</title>
-    <pseudoconstant>
-      <callback>CRM_Mappins_BAO_MappinsRule::getRuleOptions</callback>
-    </pseudoconstant>
     <html>
       <type>Select</type>
     </html>
