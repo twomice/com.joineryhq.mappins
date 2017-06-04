@@ -1,0 +1,64 @@
+<h1 crm-page-title>{{(rule.id ? ts('Edit Map Pin Rule: ' + rule.id) : ts('Add Map Pin Rule'))}}</h1>
+<div class="crm-container">
+  <div crm-ui-debug="mappinsRuleProfiles"></div>
+  <div crm-ui-debug="rule"></div>
+  <div crm-ui-debug="profiles"></div>
+
+  <table class="form-layout-compressed">
+    <tr class="crm-relationship-type-form-block-id" ng-if="rule.id">
+        <td class="label">ID</td>
+        <td>{{rule.id}}</td>
+    </tr>
+    <tr class="crm-relationship-type-form-block-criteria">
+        <td class="label">{{ts('Criteria')}}</td>
+        <td><input type="text" ng-model="rule.criteria"><br />
+        <span class="description">{{ts('The attribute of the mapped contact to check.')}}</span></td>
+    </tr>
+    <tr class="crm-relationship-type-form-block-value">
+        <td class="label">{{ts('Value')}}</td>
+        <td><input type="text" ng-model="rule.value"><br />
+        <span class="description">{{ts('The value which the mapped contact must have, for the given criteria, in order for this rule to match.')}}</span></td>
+    </tr>
+    <tr class="crm-relationship-type-form-block-image_url" id="image_url_tr">
+        <td class="label">{{ts('Image')}}</td>            
+        <td>
+          <a class="button crm-mappins-rule-image-button" id="mappinsrule-image-button" href="" data-rule-id="{$row.id}" ng-click="openKCFinder()">
+            <img 
+              id="mappinsrule-image-preview" 
+              src="{{rule.image_url}}" 
+              height="20px" 
+              width="20px" 
+              ng-style="{visibility : ((rule.hasOwnProperty('image_url')) && 'visible') || 'hidden'}"
+            />
+          </a>
+          <br style="clear:both" />
+          <span class="description">{{ts('The image to use if this rule matches. Click to select/upload an image.')}}</span>
+          </td>
+        </td>              
+
+    </tr>
+    <tr class="crm-relationship-type-form-block-uf_group_id">
+        <td class="label">{{ts('Profile(s)')}}</td>
+        <td>
+          <select
+            multiple 
+            ui-jq="select2"
+            ui-options="{dropdownAutoWidth : true}"
+            ng-model="rule.uf_group_id" 
+            required
+            id="uf_group_id"
+            ng-model="rule.uf_group_id"
+            ng-options="profile.id as profile.title for profile in profiles | orderBy:'title'"
+          >
+          </select><br />          
+        <span class="description">{{ts('This rule will only apply on the selected profile(s).')}}</span></td>
+    </tr>
+    <tr class="crm-relationship-type-form-block-is_active">
+        <td class="label">{{ts('Active')}}</td>
+        <td><input type="text" ng-model="rule.is_active"><br />
+        <span class="description">{{ts('Is this rule active?')}}</span></td>
+    </tr>
+  </table>
+  <button crm-icon="fa-check" ng-click="save();">Save</button>
+  <button crm-icon="fa-times" ng-click="cancel();">Cancel</button>
+</div>

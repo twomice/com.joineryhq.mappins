@@ -1,28 +1,10 @@
 (function(angular, $, _) {
 
-  angular.module('mappins').config(function($routeProvider) {
-      $routeProvider.when('/mappins/rules', {
-        controller: 'Mappinsrules',
-        templateUrl: '~/mappins/rules.html',
-
-        // If you need to look up data when opening the page, list it out
-        // under "resolve".
-        resolve: {
-        }
-      });
-    }
-  );
-
-  // The controller uses *injection*. This default injects a few things:
-  //   $scope -- This is the set of variables shared between JS and HTML.
-  //   crmApi, crmStatus, crmUiHelp -- These are services provided by civicrm-core.
-  //   dialogService -- provided by CiviCRM
-  //   $q, $timeout -- provided by angular.
-  //   myContact -- The current contact, defined above in config().
-  angular.module('mappins').controller('Mappinsrules', function($scope, crmApi, crmStatus, crmUiHelp, dialogService, $q, $timeout, $location) {
+  // Controller for the "Extension Overlay" dialog content.
+  angular.module('mappins').controller('ruleFormCtrl', function ruleFormCtrl($scope, crmApi, crmStatus, crmUiHelp, dialogService, $q, $timeout) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('mappins');
-    var hs = $scope.hs = crmUiHelp({file: 'CRM/mappins/rules'}); // See: templates/CRM/mappins/rules.hlp
+    var hs = $scope.hs = crmUiHelp({file: 'CRM/mappins/rule'}); // See: templates/CRM/mappins/rules.hlp
 
     /**
      * Add action-link methods to the given rule object. These methods
@@ -139,47 +121,47 @@
       
     }
     
-//    $scope.openRuleForm = function openRuleForm(rule) {
-//      if (typeof rule === 'undefined') {
-//        var title = ts('Create new rule');
-//        var rule = {}
-//      }
-//      else {
-//        var title = ts('Edit rule');
-//      }
-//      var options = CRM.utils.adjustDialogDefaults({
-//        autoOpen: false,
-//        title: title
-//      });
-//      
-//      var model = {
-//        rule: rule,
-//        profiles: $scope.profiles
-//      };
-//      dialogService.open('mappins-rule-form', '~/mappins/ruleFormCtrl.html', model, options)
-//      
-//      var setOverlayButtons = function setOverlayButtons() {
-//        var buttons = [
-//          {
-//            text: ts('Save'),
-//            click: function() {
-//              alert('fixme: save button');
-//              dialogService.close('mappins-rule-form');
-//            }
-//          },
-//          {
-//            text: ts('Cancel'),
-//            icons: {primary: 'fa-times'},
-//            click: function() {
-//              dialogService.cancel('mappins-rule-form');
-//            }
-//          }
-//        ]
-//        dialogService.setButtons('mappins-rule-form', buttons);
-//      }
-//      $timeout(setOverlayButtons)
-//    }
-//    
+    $scope.openRuleForm = function openRuleForm(rule) {
+      if (typeof rule === 'undefined') {
+        var title = ts('Create new rule');
+        var rule = {}
+      }
+      else {
+        var title = ts('Edit rule');
+      }
+      var options = CRM.utils.adjustDialogDefaults({
+        autoOpen: false,
+        title: title
+      });
+      
+      var model = {
+        rule: rule,
+        profiles: $scope.profiles
+      };
+      dialogService.open('mappins-rule-form', '~/mappins/ruleFormCtrl.html', model, options)
+      
+      var setOverlayButtons = function setOverlayButtons() {
+        var buttons = [
+          {
+            text: ts('Save'),
+            click: function() {
+              alert('fixme: save button');
+              dialogService.close('mappins-rule-form');
+            }
+          },
+          {
+            text: ts('Cancel'),
+            icons: {primary: 'fa-times'},
+            click: function() {
+              dialogService.cancel('mappins-rule-form');
+            }
+          }
+        ]
+        dialogService.setButtons('mappins-rule-form', buttons);
+      }
+      $timeout(setOverlayButtons)
+    }
+    
     $scope.saveWeights = function saveWeights(e, ui) {
       if (e.target.id == 'selectedProfileRules') {
         model = $scope.rules.selectedProfile;
@@ -197,7 +179,8 @@
       }
     }
     
-    $scope.openKCFinder = function openKCFinder(index, viewName) {
+    $scope.openKCFinder = function openKCFinder(e, index, viewName) {
+      e.preventDefault();
       window.KCFinder = {
         callBack: function (url) {
           window.KCFinder = null;
@@ -220,8 +203,7 @@
       );
     }
     
-
-    // FIXME: probably should do this in resolve:{}.
+    
     var apiProfiles = crmApi('uf_group', 'get', {
       return: ['id', 'title'],
       sequential: 1
@@ -242,14 +224,9 @@
     $scope.rules = {};
     $scope._ = _;
     window.scope = $scope;
-    
-    // Pass $location service so we can use it in Add button ng-click.
-    $scope.$location = $location;
   
     
   });
-  
-  
+    
+
 })(angular, CRM.$, CRM._);
-
-
