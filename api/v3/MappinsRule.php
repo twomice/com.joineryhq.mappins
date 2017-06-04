@@ -105,7 +105,13 @@ function civicrm_api3_mappins_rule_delete($params) {
  * @throws API_Exception
  */
 function civicrm_api3_mappins_rule_get($params) {  
-  return _civicrm_api3_basic_get(_civicrm_api3_get_BAO(__FUNCTION__), $params);
+  $options = _civicrm_api3_get_options_from_params($params);
+  if (empty($options['return']) || array_key_exists('uf_group_id', $options['return'])) {
+    return _civicrm_api3_mappins_rule_get_with_uf_group_id($params);
+  }
+  else {
+    return _civicrm_api3_basic_get(_civicrm_api3_get_BAO(__FUNCTION__), $params);
+  }
 }
 
 /**
@@ -113,4 +119,73 @@ function civicrm_api3_mappins_rule_get($params) {
  */
 function _civicrm_api3_mappins_rule_DAO() {
   return 'CRM_Mappins_DAO_MappinsRule';
+}
+
+
+function _civicrm_api3_mappins_rule_get_with_uf_group_id($params) {
+  $sql = CRM_Utils_SQL_Select::fragment();
+  $sql
+    ->join('civicrm_mappins_rule_profile', 'LEFT JOIN civicrm_mappins_rule_profile rp ON rp.rule_id = a.id')
+    ->groupBy('a.id')
+  ;
+  $rule_dao_name = CRM_Core_DAO_AllCoreTables::getClassForTable('civicrm_mappins_rule');
+  $result =  _civicrm_api3_mappins_rule_basic_get($rule_dao_name, $params, TRUE, "", $sql, FALSE);  
+  
+  // json-encode the uf_group_id value.
+  foreach ($result['values'] as &$value) {
+    if (empty($value['uf_group_id'])) {
+      $uf_group_id = array();
+    }
+    else {
+      $uf_group_id = explode(',', $value['uf_group_id']);
+    }
+    $value['uf_group_id'] = json_encode($uf_group_id);
+  }
+  return $result;
+}
+
+/**
+ * Modified copy of _civicrm_api3_basic_get(). This version uses \Civi\API\Mappins\Api3SelectQuery
+ * instead of \Civi\API\Api3SelectQuery, so we can pull in fields from 
+ * civicrm_mappins_rule, including support for `where` parameters.
+ *
+ * @param string $bao_name
+ *   Name of BAO.
+ * @param array $params
+ *   Params from api.
+ * @param bool $returnAsSuccess
+ *   Return in api success format.
+ * @param string $entity
+ * @param CRM_Utils_SQL_Select|NULL $sql
+ *   Extra SQL bits to add to the query. For filtering current events, this might be:
+ *   CRM_Utils_SQL_Select::fragment()->where('(start_date >= CURDATE() || end_date >= CURDATE())');
+ * @param bool $uniqueFields
+ *   Should unique field names be returned (for backward compatibility)
+ *
+ * @return array
+ */
+function _civicrm_api3_mappins_rule_basic_get($bao_name, $params, $returnAsSuccess = TRUE, $entity = "", $sql = NULL, $uniqueFields = FALSE) {
+  $entity = CRM_Core_DAO_AllCoreTables::getBriefName(str_replace('_BAO_', '_DAO_', $bao_name));
+  $options = _civicrm_api3_get_options_from_params($params);
+
+  require_once('Civi/API/Mappins/Api3SelectQuery.php');
+  $query = new \Civi\API\Mappins\Api3SelectQuery($entity, CRM_Utils_Array::value('check_permissions', $params, FALSE));
+  $query->where = $params;
+  if ($options['is_count']) {
+    $query->select = array('count_rows');
+  }
+  else {
+    $query->select = array_keys(array_filter($options['return']));
+    $query->orderBy = $options['sort'];
+    $query->isFillUniqueFields = $uniqueFields;
+  }
+  $query->limit = $options['limit'];
+  $query->offset = $options['offset'];
+  $query->merge($sql);
+  $result = $query->run();
+
+  if ($returnAsSuccess) {
+    return civicrm_api3_create_success($result, $params, $entity, 'get');
+  }
+  return $result;
 }

@@ -52,6 +52,14 @@ class Api3SelectQuery extends \Civi\API\Api3SelectQuery {
   }
   
   private function buildExtraSelectFields() {
+    $method_name = 'buildExtraSelectFields_' . $this->entity;
+    if (method_exists($this, $method_name)) {
+      $this->$method_name();
+    }
+                           
+  }
+  
+  private function buildExtraSelectFields_MappinsRuleProfile() {
     $rule_field_names = array();
     $ruleprofile_dao_name = \CRM_Core_DAO_AllCoreTables::getClassForTable('civicrm_mappins_rule_profile');
     $ruleprofile_dao = new $ruleprofile_dao_name;
@@ -65,8 +73,13 @@ class Api3SelectQuery extends \Civi\API\Api3SelectQuery {
         $rule_field_names['r.'.$rule_field_name] = $rule_field_name;
       }
     }
-    
     $this->extraSelectFields = $rule_field_names;
-    
+  }
+  
+  private function buildExtraSelectFields_MappinsRule() {
+    $rule_field_names = array(
+      'group_concat(rp.uf_group_id)' => 'uf_group_id',
+    );
+    $this->extraSelectFields = $rule_field_names;
   }
 }
