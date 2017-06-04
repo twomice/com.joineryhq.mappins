@@ -29,7 +29,13 @@ function civicrm_api3_mappins_rule_create($params) {
 
 function _civicrm_api3_mappins_rule_create_mappins_rule_profile($params, $rule) {  
   if (!empty($rule['id']) && array_key_exists('uf_group_id', $params) && !empty($params['uf_group_id'])) {
-    $uf_group_ids = json_decode($params['uf_group_id']);
+    if (is_string($params['uf_group_id'])) {
+      $uf_group_ids = json_decode($params['uf_group_id']);
+    }
+    else {
+      $uf_group_ids = $params['uf_group_id'];
+    }
+    
     if (is_array($uf_group_ids)) {
       $rule_profile_result = civicrm_api3('MappinsRuleProfile', 'get', array(
         'rule_id' => $rule['id'],

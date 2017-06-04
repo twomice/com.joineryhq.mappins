@@ -68,9 +68,6 @@
       
       obj.del = function del(index, viewName) {
         rule = this;
-        console.log('index', index)
-        console.log(', viewName', viewName)
-//        $scope.rules[viewName].splice(index, 1);
         
         return crmStatus(
           // Status messages. For defaults, just use "{}"
@@ -96,12 +93,17 @@
     }
     
     $scope.loadSelectedProfileRules = function loadSelectedProfileRules() {
+      if (typeof $scope.selectedProfile == 'undefined') {
+        return;
+      }
+      
       var baseParams = {
         "options": {
           "limit": 0,
           "sort": "weight"
         }
       }
+      
       if ($scope.selectedProfile.id > 0) {
         selectedProfileParams = baseParams;
         selectedProfileParams.uf_group_id = $scope.selectedProfile.id;
@@ -206,7 +208,6 @@
       window.KCFinder = {
         callBack: function (url) {
           window.KCFinder = null;
-          console.log('rule', $scope.rules[viewName][index]);
           $scope.rules[viewName][index].image_url = url;
           $scope.$apply();
           
@@ -224,7 +225,9 @@
         'status=0, toolbar=0, location=0, menubar=0, directories=0, resizable=1, scrollbars=0, width=800, height=600'
       );
     }
-    
+    $scope.$watch('selectedProfile', function() {
+      $scope.loadSelectedProfileRules();      
+    }, true);
 
     // FIXME: probably should do this in resolve:{}.
     var apiProfiles = crmApi('uf_group', 'get', {
@@ -241,7 +244,7 @@
       $scope.profiles = profiles;
       // Set the page to start with "All profiles / fallback":
       $scope.selectedProfile = _.findWhere($scope.profiles, {'id': '16'});
-      $scope.loadSelectedProfileRules();
+//      $scope.loadSelectedProfileRules();
     });
     
     $scope.rules = {};

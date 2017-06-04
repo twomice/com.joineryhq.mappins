@@ -58,7 +58,8 @@
       $scope.rule.id = $scope.rule.rule_id;
       var uf_group_ids = [];
       for (i in mappinsRuleProfiles.values) {
-        uf_group_ids.push(mappinsRuleProfiles.values[i].uf_group_id);
+        var uf_group_id = mappinsRuleProfiles.values[i].uf_group_id || 0;
+        uf_group_ids.push(uf_group_id);
       }
       $scope.rule.uf_group_id = uf_group_ids;
     }
@@ -81,10 +82,9 @@
       return crmStatus(
         // Status messages. For defaults, just use "{}"
         {start: ts('Saving...'), success: ts('Saved')},
-        // The save action. Note that crmApi() returns a promise.
+        // The save action. Note that crmApi() returns a promise.        
         crmApi('MappinsRule', 'create', $scope.rule)
         .then(function(values) {
-          console.log('values', values)
           $window.history.back();                  
         })
       );

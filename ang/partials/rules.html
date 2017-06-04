@@ -6,13 +6,14 @@
   <div crm-ui-tab-set>
     <div id="mappinsRule-tab-perProfile" crm-ui-tab crm-title="ts('Per Profile')">
       <label for="profile">Profile</label>
-      <select id="profile" ng-model="selectedProfile" ng-options="profile.title for (key, profile) in profiles | orderBy:'title'" ng-change="setSelectedProfile(selectedProfile); loadSelectedProfileRules();"></select>
+      <select id="profile" ng-model="selectedProfile" ng-options="profile as profile.title for profile in profiles | orderBy:'title'" ng-change="setSelectedProfile(selectedProfile);"></select>
+      <div crm-ui-debug="rules.selectedProfile"></div>
       <div crm-ui-debug="rules.selectedProfile"></div>
       <div crm-ui-debug="selectedProfile"></div>
       <div crm-ui-debug="selectedProfile.hasOwnProperty('id')"></div>
       <span crm-ui-order="{var: 'byProfleOrder', 'defaults': ['weight'] }"></span>
       <div ng-if="selectedProfile.id > 0">
-        <h2>This profile considers these assigned rules first:</h2>
+        <h2>Profile <em>{{selectedProfile.title}}</em> considers these assigned rules first:</h2>
         <div ng-if="_.isEmpty(rules.selectedProfile)">
           (No rules found for this profile.)
         </div>
