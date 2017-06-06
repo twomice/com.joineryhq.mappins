@@ -3,11 +3,12 @@
   <div crm-ui-debug="profiles"></div>
   <h1 crm-page-title>{{ts('Map Pin Rules')}}</h1>
 
-  <div crm-ui-tab-set active-index="{{activeTabIndex}}">
+  <div crm-ui-tab-set tab-set-options="{{myTabSetOptions}}">
     <div id="mappinsRule-tab-perProfile" crm-ui-tab crm-title="ts('Per Profile')">
       <label for="profile">Profile</label>
       <select id="profile" ng-model="selectedProfile" ng-options="profile as profile.title for profile in profiles | orderBy:'title'" ng-change="setSelectedProfile(selectedProfile);"></select>
-      <div crm-ui-debug="rules"></div>
+      <div crm-ui-debug="rules.selectedProfile"></div>
+      <div crm-ui-debug="rules.unassigned"></div>
       <div crm-ui-debug="allRules"></div>
       <div crm-ui-debug="selectedProfile"></div>
       <div crm-ui-debug="selectedProfile.hasOwnProperty('id')"></div>
@@ -32,7 +33,7 @@
               ng-repeat="(key, value) in rules.selectedProfile"
               ng-class="(value.is_active == 0 ? 'disabled' : '')"
               ng-include="'~/mappins/blockRuleRow.html'"
-              ng-init="viewName = 'selectedProfile'"
+              ng-init="viewName = 'selectedProfile'; rule=value.rule; ruleProfile=value;"
               ng-class-even="'even-row'"
               ng-class-odd="'odd-row'"
             ></tr>
@@ -62,7 +63,7 @@
               ng-repeat="(key, value) in rules.unassigned"
               ng-class="(value.is_active == 0 ? 'disabled' : '')"
               ng-include="'~/mappins/blockRuleRow.html'"
-              ng-init="viewName = 'unassigned'"
+              ng-init="viewName = 'unassigned'; rule=value.rule; ruleProfile=value;"
               ng-class-even="'even-row'"
               ng-class-odd="'odd-row'"
             ></tr>
@@ -88,7 +89,7 @@
               ng-repeat="value in allRules"
               ng-class="(value.is_active == 0 ? 'disabled' : '')"
               ng-include="'~/mappins/blockRuleRow.html'"
-              ng-init="viewName = 'allRules'"
+              ng-init="viewName = 'allRules'; rule = value;"
               ng-class-even="'even-row'"
               ng-class-odd="'odd-row'"
             ></tr>

@@ -39,7 +39,7 @@
   //   $scope -- This is the set of variables shared between JS and HTML.
   //   crmApi, crmStatus, crmUiHelp -- These are services provided by civicrm-core.
   //   myContact -- The current contact, defined above in config().
-  angular.module('mappins').controller('MappinsruleEditCtrl', function($scope, crmApi, crmStatus, crmUiHelp, mappinsRuleProfiles, profiles, $routeParams, $location, $window, $rootScope) {
+  angular.module('mappins').controller('MappinsruleEditCtrl', function($scope, crmApi, crmStatus, crmUiHelp, mappinsRuleProfiles, profiles, $routeParams, $location, $window) {
 
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('mappins');
@@ -76,7 +76,15 @@
     
     // Pass $window service so we can use it in Cancel button ng-click.
     $scope.cancel = function cancel() {
-      $window.history.back();
+      goToDestination();
+    }
+    
+    var goToDestination = function goToDestination() {
+      var query = {}
+      if ($routeParams.viewName == 'allRules') {
+        query.tid = 1;
+      }
+      $window.location.href = CRM.url('civicrm/a/#' + $routeParams.destination, query);
     };
 
     $scope.save = function save() {
@@ -86,7 +94,7 @@
         // The save action. Note that crmApi() returns a promise.        
         crmApi('MappinsRule', 'create', $scope.rule)
         .then(function(values) {
-          $window.history.back();                  
+          goToDestination();
         })
       );
     };

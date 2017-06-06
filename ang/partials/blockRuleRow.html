@@ -1,23 +1,24 @@
-<td ng-if="viewName != 'allRules'">{{value.rule_id}}</td>
-<td ng-if="viewName == 'allRules'">{{value.id}}</td>
+<td>{{rule.id}}</td>
 
 
 <td>
-  {{criteriaOptions[value.criteria]}}
+  {{criteriaOptions[rule.criteria]}}
 </td>
 <td>
-  {{value.value}}
+  {{rule.value}}
 </td>
 <td>
-  <a class="button crm-mappins-rule-image-button" href="" data-rule-id="{{value.rule_id}}" ng-click="openKCFinder($index, viewName)">
+  <a class="button crm-mappins-rule-image-button" href="" data-rule-id="{{rule.id}}" ng-click="openKCFinder(rule)">
+  <!-- <a class="button crm-mappins-rule-image-button" href="" data-rule-id="{{rule.id}}" ng-click="openKCFinder($index, viewName)"> -->
     <img 
       id="mappinsrule-image-preview" 
-      src="{{value.image_url}}" 
+      src="{{rule.image_url}}" 
       height="20px" 
       width="20px" 
-      ng-style="{visibility : ((value.hasOwnProperty('image_url')) && 'visible') || 'hidden'}"
+      ng-style="{visibility : ((rule.hasOwnProperty('image_url')) && 'visible') || 'hidden'}"
     />
-  </a>
+  </a><br>
+  <div crm-ui-debug="rule"></div>
 </td>
-<td ng-include="'~/mappins/blockRuleActionLinks.html'" ng-init="rule = value"></td>
-<td ng-include="'~/mappins/blockRuleProfiles.html'" ng-init="rule = value" ng-if="viewName == 'allRules'"></td>
+<td ng-include="'~/mappins/blockRuleActionLinks.html'"></td>
+<td ng-include="'~/mappins/blockRuleProfiles.html'" ng-if="viewName == 'allRules'"></td>

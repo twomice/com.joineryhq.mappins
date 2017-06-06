@@ -98,25 +98,25 @@
         return;
       }
       
-      if ($scope.selectedProfile.id > 0) {
-        console.log('===============', $scope.allRules);
-        $scope.rules.selectedProfile = _.filter($scope.allRules, function(rule){
-          console.log('profileid:' + $scope.selectedProfile.id, rule.uf_group_id, rule.uf_group_id.indexOf($scope.selectedProfile.id));
-          return (rule.uf_group_id.indexOf($scope.selectedProfile.id) > -1);
-        });
-      }
-      console.log('===============', $scope.allRules);
-      $scope.rules.unassigned = _.filter($scope.allRules, function(rule){
-        console.log('profileid:' + 0 +'; matches: '+ rule.uf_group_id.indexOf(0), rule);
-        return (rule.uf_group_id.indexOf(0) > -1);
-      });
-      return;
+//      if ($scope.selectedProfile.id > 0) {
+//        $scope.rules.selectedProfile = _.filter($scope.allRules, function(rule){
+//          return (rule.uf_group_id.indexOf($scope.selectedProfile.id) > -1);
+//        });
+//      }
+//      $scope.rules.unassigned = _.filter($scope.allRules, function(rule){
+//        return (rule.uf_group_id.indexOf(0) > -1);
+//      });
+//      return;
       
       
       var baseParams = {
         "options": {
           "limit": 0,
-          "sort": "weight"
+          "return": ["id","weight"]
+          // Don't use 'serialize' here, because we want to return an array,
+          // so that 'sortable' can sort the rows (see rules.html).
+          // Since we don't use 'serialize', the 'sort' parameter doesn't work;
+          // I'm not sure why that is.
         }
       }
       
@@ -126,17 +126,18 @@
         var apiProfiles = crmApi('MappinsRuleProfile', 'get', selectedProfileParams);
         $q.all([apiProfiles])
         .then(function(values){
-          var rules = $.map(values[0].values, function(value, index) {
+          // Convert object to array so 'sortable' can work. Also add some
+          // relevant properties.
+          var ruleProfiles = $.map(values[0].values, function(value, index) {
+            value.rule = _.findWhere($scope.allRules, {"id": value.rule_id});
+            addActionMethods(value);
             return [value];
           });
-          rules.sort(function(a, b){
+          // Sort the rows here. See comment in baseParams for some rationale.
+          ruleProfiles.sort(function(a, b){
             return a.weight > b.weight;
           })
-          rules = _.each(rules, function(obj){
-            addActionMethods(obj)
-          })
-          
-          $scope.rules.selectedProfile = rules;
+          $scope.rules.selectedProfile = ruleProfiles;
         });      
       }
       
@@ -145,17 +146,19 @@
       var apiUnassigned = crmApi('MappinsRuleProfile', 'get', unassignedParams);
       $q.all([apiUnassigned])
       .then(function(values){
-        var rules = $.map(values[0].values, function(value, index) {
-          return [value];
-        });
-        rules.sort(function(a, b){
-          return a.weight > b.weight;
-        })        
-        rules = _.each(rules, function(obj){
-          addActionMethods(obj)
-        })
+          // Convert object to array so 'sortable' can work. Also add some
+          // relevant properties.
+          var ruleProfiles = $.map(values[0].values, function(value, index) {
+            value.rule = _.findWhere($scope.allRules, {"id": value.rule_id});
+            addActionMethods(value);
+            return [value];
+          });
+          // Sort the rows here. See comment in baseParams for some rationale.
+          ruleProfiles.sort(function(a, b){
+            return a.weight > b.weight;
+          })
         
-        $scope.rules.unassigned = rules;
+        $scope.rules.unassigned = ruleProfiles;
       });      
 
 
@@ -188,7 +191,6 @@
       .then(function(values){
         $scope.allRules = values[0].values;
         for (i in $scope.allRules) {
-          $scope.allRules[i].rule_id = $scope.allRules[i].id;
           for (u in $scope.allRules[i].uf_group_id) {
             if ($scope.allRules[i].uf_group_id[u] == 'NULL') {
               $scope.allRules[i].uf_group_id[u] = 0;
@@ -198,15 +200,15 @@
       });      
     }
     
-    $scope.openKCFinder = function openKCFinder(index, viewName) {
+    $scope.openKCFinder = function openKCFinder(rule) {
       window.KCFinder = {
         callBack: function (url) {
           window.KCFinder = null;
-          $scope.rules[viewName][index].image_url = url;
+          rule.image_url = url;
           $scope.$apply();
           
           params = {
-            'id': $scope.rules[viewName][index].rule_id,
+            'id': rule.id,
             'image_url': url
           };
           CRM.api3('MappinsRule', 'create', params, ts('Image saved'));
@@ -258,7 +260,7 @@
     $scope._ = _;
     window.scope = $scope;
     
-    // Pass $location service so we can use it in Add button ng-click.
+    // Pass $location service so we can use it in Add/Edit button ng-click.
     $scope.$location = $location;
   
     // Load "loadAll" for "All" tab.
@@ -266,16 +268,10 @@
     
     // CiviCRM Core doesn't yet support active tab in crm-ui-tabs, but I'm working on that.
     // Pass the active tab index to $scope so crm-ui-tabs can use it.
-    $scope.activeTabIndex = $routeParams.tid;
-    
-    // Sloppy history tracking. Useful for 
-    $scope.$on('$locationChangeStart', function(evt, newUrl, oldUrl) {
-      if (typeof $rootScope.mappins.history == 'undefined' ) {
-        $rootScope.mappins.history = [];
-      }      
-      $rootScope.mappins.history.push(oldUrl);
-    });
-    
+    $scope.myTabSetOptions = {
+      "active": $routeParams.tid
+    }
+        
   });
   
   
