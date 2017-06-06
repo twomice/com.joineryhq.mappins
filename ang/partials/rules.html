@@ -7,8 +7,8 @@
     <div id="mappinsRule-tab-perProfile" crm-ui-tab crm-title="ts('Per Profile')">
       <label for="profile">Profile</label>
       <select id="profile" ng-model="selectedProfile" ng-options="profile as profile.title for profile in profiles | orderBy:'title'" ng-change="setSelectedProfile(selectedProfile);"></select>
-      <div crm-ui-debug="rules.selectedProfile"></div>
-      <div crm-ui-debug="rules.selectedProfile"></div>
+      <div crm-ui-debug="rules"></div>
+      <div crm-ui-debug="allRules"></div>
       <div crm-ui-debug="selectedProfile"></div>
       <div crm-ui-debug="selectedProfile.hasOwnProperty('id')"></div>
       <span crm-ui-order="{var: 'byProfleOrder', 'defaults': ['weight'] }"></span>

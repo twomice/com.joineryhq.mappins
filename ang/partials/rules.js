@@ -98,6 +98,21 @@
         return;
       }
       
+      if ($scope.selectedProfile.id > 0) {
+        console.log('===============', $scope.allRules);
+        $scope.rules.selectedProfile = _.filter($scope.allRules, function(rule){
+          console.log('profileid:' + $scope.selectedProfile.id, rule.uf_group_id, rule.uf_group_id.indexOf($scope.selectedProfile.id));
+          return (rule.uf_group_id.indexOf($scope.selectedProfile.id) > -1);
+        });
+      }
+      console.log('===============', $scope.allRules);
+      $scope.rules.unassigned = _.filter($scope.allRules, function(rule){
+        console.log('profileid:' + 0 +'; matches: '+ rule.uf_group_id.indexOf(0), rule);
+        return (rule.uf_group_id.indexOf(0) > -1);
+      });
+      return;
+      
+      
       var baseParams = {
         "options": {
           "limit": 0,
