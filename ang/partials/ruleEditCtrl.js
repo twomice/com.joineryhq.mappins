@@ -39,7 +39,8 @@
   //   $scope -- This is the set of variables shared between JS and HTML.
   //   crmApi, crmStatus, crmUiHelp -- These are services provided by civicrm-core.
   //   myContact -- The current contact, defined above in config().
-  angular.module('mappins').controller('MappinsruleEditCtrl', function($scope, crmApi, crmStatus, crmUiHelp, mappinsRuleProfiles, profiles, $routeParams, $location, $window) {
+  angular.module('mappins').controller('MappinsruleEditCtrl', function($scope, crmApi, crmStatus, crmUiHelp, mappinsRuleProfiles, profiles, $routeParams, $location, $window, $rootScope) {
+
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('mappins');
     var hs = $scope.hs = crmUiHelp({file: 'CRM/mappins/ruleEditCtrl'}); // See: templates/CRM/mappins/ruleEditCtrl.hlp

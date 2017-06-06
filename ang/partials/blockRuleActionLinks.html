@@ -1,7 +1,7 @@
 <a 
-  class="action-item crm-hover-button" href="#/mappins/rule/{{rule.rule_id}}"  
+  class="action-item crm-hover-button" href="#/mappins/rule/{{rule.rule_id}}"
 >
-  Edit
+  {{ts('Edit')}}
 </a>
 
 <a
@@ -10,7 +10,7 @@
   href=""
   crm-confirm="{message: ts('Enable <em>Rule %1</em> in all profiles?', {1: rule.rule_id})}" on-yes="rule.enable();"
 >
-  Enable
+  {{ts('Enable')}}
 </a>
 
 <a
@@ -19,7 +19,7 @@
   href=""
   crm-confirm="{message: ts('Disable <em>Rule %1</em> in all profiles?', {1: rule.rule_id})}" on-yes="rule.disable();"
 >
-  Disable
+  {{ts('Disable')}}
 </a>
 
 <a
@@ -27,5 +27,5 @@
   href=""
   crm-confirm="{message: ts('Delete <em>Rule %1</em> from all profiles?', {1: rule.rule_id})}" on-yes="rule.del($index, viewName);"
 >
-  Delete
+  {{ts('Delete')}}  
 </a>

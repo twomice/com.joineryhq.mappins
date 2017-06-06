@@ -1,7 +1,7 @@
 (function(angular, $, _) {
 
   angular.module('mappins').config(function($routeProvider) {
-      $routeProvider.when('/mappins/rules', {
+      $routeProvider.when('/mappins/rules/:profileId?', {
         controller: 'Mappinsrules',
         templateUrl: '~/mappins/rules.html',
 
@@ -19,7 +19,8 @@
   //   dialogService -- provided by CiviCRM
   //   $q, $timeout -- provided by angular.
   //   myContact -- The current contact, defined above in config().
-  angular.module('mappins').controller('Mappinsrules', function($scope, crmApi, crmStatus, crmUiHelp, dialogService, $q, $timeout, $location) {
+  angular.module('mappins').controller('Mappinsrules', function($scope, crmApi, crmStatus, crmUiHelp, dialogService, $q, $timeout, $location, $routeParams, $rootScope) {
+
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('mappins');
     var hs = $scope.hs = crmUiHelp({file: 'CRM/mappins/rules'}); // See: templates/CRM/mappins/rules.hlp
@@ -146,47 +147,6 @@
       
     }
     
-//    $scope.openRuleForm = function openRuleForm(rule) {
-//      if (typeof rule === 'undefined') {
-//        var title = ts('Create new rule');
-//        var rule = {}
-//      }
-//      else {
-//        var title = ts('Edit rule');
-//      }
-//      var options = CRM.utils.adjustDialogDefaults({
-//        autoOpen: false,
-//        title: title
-//      });
-//      
-//      var model = {
-//        rule: rule,
-//        profiles: $scope.profiles
-//      };
-//      dialogService.open('mappins-rule-form', '~/mappins/ruleFormCtrl.html', model, options)
-//      
-//      var setOverlayButtons = function setOverlayButtons() {
-//        var buttons = [
-//          {
-//            text: ts('Save'),
-//            click: function() {
-//              alert('fixme: save button');
-//              dialogService.close('mappins-rule-form');
-//            }
-//          },
-//          {
-//            text: ts('Cancel'),
-//            icons: {primary: 'fa-times'},
-//            click: function() {
-//              dialogService.cancel('mappins-rule-form');
-//            }
-//          }
-//        ]
-//        dialogService.setButtons('mappins-rule-form', buttons);
-//      }
-//      $timeout(setOverlayButtons)
-//    }
-//    
     $scope.saveWeights = function saveWeights(e, ui) {
       if (e.target.id == 'selectedProfileRules') {
         model = $scope.rules.selectedProfile;
@@ -202,6 +162,25 @@
         };
         CRM.api3('MappinsRuleProfile', 'create', params, ts('Order saved'));
       }
+    }
+    
+    $scope.loadAll = function loadAll() {
+      var apiRules = crmApi('MappinsRule', 'get', {
+        "sequential": 1,
+        "options": {"sort":"id"}
+      });
+      $q.all([apiRules])
+      .then(function(values){
+        $scope.allRules = values[0].values;
+        for (i in $scope.allRules) {
+          $scope.allRules[i].rule_id = $scope.allRules[i].id;
+          for (u in $scope.allRules[i].uf_group_id) {
+            if ($scope.allRules[i].uf_group_id[u] == 'NULL') {
+              $scope.allRules[i].uf_group_id[u] = 0;
+            }
+          }
+        }
+      });      
     }
     
     $scope.openKCFinder = function openKCFinder(index, viewName) {
@@ -225,6 +204,20 @@
         'status=0, toolbar=0, location=0, menubar=0, directories=0, resizable=1, scrollbars=0, width=800, height=600'
       );
     }
+    
+    $scope.getProfileTitle = function getProfileTitle(profileId) {
+      if (typeof profileId == 'undefined') {
+        profileId = 0;
+      }
+      var profile = _.findWhere($scope.profiles, {'id': profileId});
+      if (_.isObject(profile)) {
+        return profile.title;
+      }
+      else {
+        return '';
+      }
+    }
+    
     $scope.$watch('selectedProfile', function() {
       $scope.loadSelectedProfileRules();      
     }, true);
@@ -243,8 +236,7 @@
       });
       $scope.profiles = profiles;
       // Set the page to start with "All profiles / fallback":
-      $scope.selectedProfile = _.findWhere($scope.profiles, {'id': '16'});
-//      $scope.loadSelectedProfileRules();
+      $scope.selectedProfile = _.findWhere($scope.profiles, {'id': $routeParams.profileId});
     });
     
     $scope.rules = {};
@@ -254,6 +246,20 @@
     // Pass $location service so we can use it in Add button ng-click.
     $scope.$location = $location;
   
+    // Load "loadAll" for "All" tab.
+    $scope.loadAll();
+    
+    // CiviCRM Core doesn't yet support active tab in crm-ui-tabs, but I'm working on that.
+    // Pass the active tab index to $scope so crm-ui-tabs can use it.
+    $scope.activeTabIndex = $routeParams.tid;
+    
+    // Sloppy history tracking. Useful for 
+    $scope.$on('$locationChangeStart', function(evt, newUrl, oldUrl) {
+      if (typeof $rootScope.mappins.history == 'undefined' ) {
+        $rootScope.mappins.history = [];
+      }      
+      $rootScope.mappins.history.push(oldUrl);
+    });
     
   });
   

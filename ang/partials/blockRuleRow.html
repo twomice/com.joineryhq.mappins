@@ -1,6 +1,7 @@
-<td>
-  {{value.rule_id}}
-</td>
+<td ng-if="viewName != 'allRules'">{{value.rule_id}}</td>
+<td ng-if="viewName == 'allRules'">{{value.id}}</td>
+
+
 <td>
   {{criteriaOptions[value.criteria]}}
 </td>
@@ -14,9 +15,9 @@
       src="{{value.image_url}}" 
       height="20px" 
       width="20px" 
-      ng-style="{visibility : ((rule.hasOwnProperty('image_url')) && 'visible') || 'hidden'}"
+      ng-style="{visibility : ((value.hasOwnProperty('image_url')) && 'visible') || 'hidden'}"
     />
   </a>
 </td>
-<td ng-include="'~/mappins/blockRuleActionLinks.html'" ng-init="rule = value">
-</td>
+<td ng-include="'~/mappins/blockRuleActionLinks.html'" ng-init="rule = value"></td>
+<td ng-include="'~/mappins/blockRuleProfiles.html'" ng-init="rule = value" ng-if="viewName == 'allRules'"></td>

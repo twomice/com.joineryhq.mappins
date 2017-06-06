@@ -3,7 +3,7 @@
   <div crm-ui-debug="profiles"></div>
   <h1 crm-page-title>{{ts('Map Pin Rules')}}</h1>
 
-  <div crm-ui-tab-set>
+  <div crm-ui-tab-set active-index="{{activeTabIndex}}">
     <div id="mappinsRule-tab-perProfile" crm-ui-tab crm-title="ts('Per Profile')">
       <label for="profile">Profile</label>
       <select id="profile" ng-model="selectedProfile" ng-options="profile as profile.title for profile in profiles | orderBy:'title'" ng-change="setSelectedProfile(selectedProfile);"></select>
@@ -24,7 +24,7 @@
               <th>{{ts('Criteria')}}</th>
               <th>{{ts('Value')}}</th>
               <th>{{ts('Image')}}</th>
-              <th>Actions</th>
+              <th>{{ts('Actions')}}</th>
             </tr>
           </thead>
           <tbody ui-sortable="{stop: saveWeights}" ng-model="rules.selectedProfile" id="selectedProfileRules">
@@ -51,7 +51,7 @@
               <th>{{ts('Criteria')}}</th>
               <th>{{ts('Value')}}</th>
               <th>{{ts('Image')}}</th>
-              <th>Actions</th>
+              <th>{{ts('Actions')}}</th>
             </tr>
           </thead>
           <!--
@@ -70,8 +70,30 @@
         </table>        
       </div>
     </div>
-    <div id="mappinsRule-tab-all" crm-ui-tab crm-title="ts('All')">
-      all
+    <div id="mappinsRule-tab-all" crm-ui-tab crm-title="ts('All')" ng-click="window.alert('a');">
+      <div crm-ui-debug="allRules"></div>
+        <table class="display" ng-if="! _.isEmpty(allRules)">
+          <thead>
+            <tr>
+              <th>{{ts('ID')}}</th>
+              <th>{{ts('Criteria')}}</th>
+              <th>{{ts('Value')}}</th>
+              <th>{{ts('Image')}}</th>
+              <th>{{ts('Actions')}}</th>
+              <th>{{ts('Profiles')}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr             
+              ng-repeat="value in allRules"
+              ng-class="(value.is_active == 0 ? 'disabled' : '')"
+              ng-include="'~/mappins/blockRuleRow.html'"
+              ng-init="viewName = 'allRules'"
+              ng-class-even="'even-row'"
+              ng-class-odd="'odd-row'"
+            ></tr>
+          </tbody>
+        </table>              
     </div>
   </div>
 </div>

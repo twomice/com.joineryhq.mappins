@@ -134,12 +134,11 @@ function _civicrm_api3_mappins_rule_get_with_uf_group_id($params) {
   // json-encode the uf_group_id value.
   foreach ($result['values'] as &$value) {
     if (empty($value['uf_group_id'])) {
-      $uf_group_id = array();
+      $value['uf_group_id'] = array();
     }
     else {
-      $uf_group_id = explode(',', $value['uf_group_id']);
+      $value['uf_group_id'] = explode(',', $value['uf_group_id']);
     }
-    $value['uf_group_id'] = json_encode($uf_group_id);
   }
   return $result;
 }

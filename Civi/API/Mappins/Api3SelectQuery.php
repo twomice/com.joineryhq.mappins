@@ -78,7 +78,7 @@ class Api3SelectQuery extends \Civi\API\Api3SelectQuery {
   
   private function buildExtraSelectFields_MappinsRule() {
     $rule_field_names = array(
-      'group_concat(rp.uf_group_id)' => 'uf_group_id',
+      "group_concat(ifnull(rp.uf_group_id, 'NULL'))" => 'uf_group_id',
     );
     $this->extraSelectFields = $rule_field_names;
   }
