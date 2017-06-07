@@ -1,4 +1,5 @@
 <?php
+
 //TODO: make the per-profile stuff work like this:
 // * 1. Weight is per-profile-per-rule
 // * 2. a rule can apply to more than one profile, and have a different weight per profile

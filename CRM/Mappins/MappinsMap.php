@@ -4,6 +4,7 @@
  * A map, on which we'll set the map images based on our rules.
  */
 class CRM_Mappins_MappinsMap {
+
   /**
    * The Smarty template object that powers this map page.
    *
@@ -54,7 +55,7 @@ class CRM_Mappins_MappinsMap {
   public function getRules() {
     if (!isset($this->rules)) {
       $this->rules = array();
-      
+
       if ($this->gid) {
         $this->rules = self::getRulesPerProfile($this->gid);
       }
@@ -185,10 +186,9 @@ class CRM_Mappins_MappinsMap {
     else {
       $params['uf_group_id'] = $gid;
     }
-    
+
     $rule_profile_result = civicrm_api3('MappinsRuleProfile', 'get', $params);
     return $rule_profile_result['values'];
-    
   }
-  
+
 }

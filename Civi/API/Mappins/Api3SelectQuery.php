@@ -8,21 +8,21 @@ namespace Civi\API\Mappins;
  * @author as
  */
 class Api3SelectQuery extends \Civi\API\Api3SelectQuery {
-  
+
   public $extraSelectFields;
-  
+
   function __construct($entity, $checkPermissions) {
     parent::__construct($entity, $checkPermissions);
     $this->buildExtraSelectFields();
   }
-  
+
   function buildWhereClause() {
     parent::buildWhereClause();
-    
+
     $filters = array();
-    foreach($this->where as $key => $value) {
+    foreach ($this->where as $key => $value) {
       $table_name = $column_name = NULL;
-      
+
       $key = str_replace('civicrm_mappins_rule.', '', $key);
       if (array_key_exists('r.' . $key, $this->extraSelectFields)) {
         $table_name = 'r';
@@ -38,27 +38,25 @@ class Api3SelectQuery extends \Civi\API\Api3SelectQuery {
         $value = array('=' => $value);
       }
       $filters[$key] = \CRM_Core_DAO::createSQLFilter("{$table_name}.{$column_name}", $value);
-      
     }
     // Add the remaining params using AND
     foreach ($filters as $filter) {
       $this->query->where($filter);
     }
   }
-  
+
   function buildSelectFields() {
     parent::buildSelectFields();
     $this->selectFields = array_merge($this->selectFields, $this->extraSelectFields);
   }
-  
+
   private function buildExtraSelectFields() {
     $method_name = 'buildExtraSelectFields_' . $this->entity;
     if (method_exists($this, $method_name)) {
       $this->$method_name();
     }
-                           
   }
-  
+
   private function buildExtraSelectFields_MappinsRuleProfile() {
     $rule_field_names = array();
     $ruleprofile_dao_name = \CRM_Core_DAO_AllCoreTables::getClassForTable('civicrm_mappins_rule_profile');
@@ -70,16 +68,17 @@ class Api3SelectQuery extends \Civi\API\Api3SelectQuery {
 
     foreach (array_keys($rule_dao->fields()) as $rule_field_name) {
       if (!in_array($rule_field_name, $ruleprofile_field_names)) {
-        $rule_field_names['r.'.$rule_field_name] = $rule_field_name;
+        $rule_field_names['r.' . $rule_field_name] = $rule_field_name;
       }
     }
     $this->extraSelectFields = $rule_field_names;
   }
-  
+
   private function buildExtraSelectFields_MappinsRule() {
     $rule_field_names = array(
       "group_concat(if (rp.id AND rp.uf_group_id IS NULL, 'NULL', rp.uf_group_id))" => 'uf_group_id',
     );
     $this->extraSelectFields = $rule_field_names;
   }
+
 }

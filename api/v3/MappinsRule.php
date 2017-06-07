@@ -21,13 +21,13 @@ function _civicrm_api3_mappins_rule_create_spec(&$spec) {
  */
 function civicrm_api3_mappins_rule_create($params) {
   $ret = _civicrm_api3_basic_create(_civicrm_api3_get_BAO(__FUNCTION__), $params);
-  
+
   // Handle MappinsRuleProfile entities appropriately.
-  _civicrm_api3_mappins_rule_create_mappins_rule_profile($params, $ret); 
+  _civicrm_api3_mappins_rule_create_mappins_rule_profile($params, $ret);
   return $ret;
 }
 
-function _civicrm_api3_mappins_rule_create_mappins_rule_profile($params, $rule) {  
+function _civicrm_api3_mappins_rule_create_mappins_rule_profile($params, $rule) {
   if (!empty($rule['id']) && array_key_exists('uf_group_id', $params) && !empty($params['uf_group_id'])) {
     if (is_string($params['uf_group_id'])) {
       $uf_group_ids = json_decode($params['uf_group_id']);
@@ -35,41 +35,41 @@ function _civicrm_api3_mappins_rule_create_mappins_rule_profile($params, $rule) 
     else {
       $uf_group_ids = $params['uf_group_id'];
     }
-    
+
     if (is_array($uf_group_ids)) {
       $rule_profile_result = civicrm_api3('MappinsRuleProfile', 'get', array(
         'rule_id' => $rule['id'],
         'return' => array("id", "uf_group_id", "weight"),
         'options' => array('sort' => "weight"),
       ));
-      
+
       // Compile lists of entities to create.
       $to_create = $uf_group_ids;
-      foreach ($rule_profile_result['values'] as $rule_profile_value) {          
+      foreach ($rule_profile_result['values'] as $rule_profile_value) {
         if (in_array($rule_profile_value['uf_group_id'], $uf_group_ids)) {
           // Existing entity IS in uf_group_ids.
           // No need create this one, it already exists and should. Just remove it
           // from the list of entities to create.
           $existing_uf_group_id = $rule_profile_value['uf_group_id'];
-          if(($index = array_search($existing_uf_group_id, $to_create)) !== false) {
+          if (($index = array_search($existing_uf_group_id, $to_create)) !== false) {
             unset($to_create[$index]);
-          }          
+          }
         }
-        elseif((
-            // Handle this odd case: If $rule_profile_value['uf_group_id'] is null
-            // or not set, it represents an "all profiles" rule; also, the presence
-            // of "0" in $uf_group_ids represents that it should be saved as
-            // an "all profiles" rule, so we can leave things alone if those two
-            // things are true.
-            empty($rule_profile_value['uf_group_id']) && in_array(0, $uf_group_ids)
+        elseif ((
+          // Handle this odd case: If $rule_profile_value['uf_group_id'] is null
+          // or not set, it represents an "all profiles" rule; also, the presence
+          // of "0" in $uf_group_ids represents that it should be saved as
+          // an "all profiles" rule, so we can leave things alone if those two
+          // things are true.
+          empty($rule_profile_value['uf_group_id']) && in_array(0, $uf_group_ids)
           )
-        ) {        
+        ) {
           $existing_uf_group_id = 0;
-          if(($index = array_search($existing_uf_group_id, $to_create)) !== false) {
+          if (($index = array_search($existing_uf_group_id, $to_create)) !== false) {
             unset($to_create[$index]);
-          }          
+          }
         }
-        else {          
+        else {
           // Existing entity is not in uf_group_ids, so delete it
           civicrm_api3('MappinsRuleProfile', 'delete', array(
             'id' => $rule_profile_value['id'],
@@ -83,7 +83,7 @@ function _civicrm_api3_mappins_rule_create_mappins_rule_profile($params, $rule) 
           'rule_id' => $rule['id'],
         ));
       }
-      
+
       // Correct new weights by setting them all to the entity ID.  This works
       // because all new MappinsRuleProfile entities should have the highest
       // weight.
@@ -119,7 +119,7 @@ function civicrm_api3_mappins_rule_delete($params) {
  * @return array API result descriptor
  * @throws API_Exception
  */
-function civicrm_api3_mappins_rule_get($params) {  
+function civicrm_api3_mappins_rule_get($params) {
   $options = _civicrm_api3_get_options_from_params($params);
   if (empty($options['return']) || array_key_exists('uf_group_id', $options['return'])) {
     return _civicrm_api3_mappins_rule_get_with_uf_group_id($params);
@@ -136,7 +136,6 @@ function _civicrm_api3_mappins_rule_DAO() {
   return 'CRM_Mappins_DAO_MappinsRule';
 }
 
-
 function _civicrm_api3_mappins_rule_get_with_uf_group_id($params) {
   $sql = CRM_Utils_SQL_Select::fragment();
   $sql
@@ -144,8 +143,8 @@ function _civicrm_api3_mappins_rule_get_with_uf_group_id($params) {
     ->groupBy('a.id')
   ;
   $rule_dao_name = CRM_Core_DAO_AllCoreTables::getClassForTable('civicrm_mappins_rule');
-  $result =  _civicrm_api3_mappins_rule_basic_get($rule_dao_name, $params, TRUE, "", $sql, FALSE);  
-  
+  $result = _civicrm_api3_mappins_rule_basic_get($rule_dao_name, $params, TRUE, "", $sql, FALSE);
+
   // json-encode the uf_group_id value.
   foreach ($result['values'] as &$value) {
     if (empty($value['uf_group_id'])) {
@@ -160,7 +159,7 @@ function _civicrm_api3_mappins_rule_get_with_uf_group_id($params) {
 
 /**
  * Modified copy of _civicrm_api3_basic_get(). This version uses \Civi\API\Mappins\Api3SelectQuery
- * instead of \Civi\API\Api3SelectQuery, so we can pull in fields from 
+ * instead of \Civi\API\Api3SelectQuery, so we can pull in fields from
  * civicrm_mappins_rule, including support for `where` parameters.
  *
  * @param string $bao_name

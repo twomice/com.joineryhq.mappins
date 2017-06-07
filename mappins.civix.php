@@ -14,7 +14,7 @@ function _mappins_civix_civicrm_config(&$config = NULL) {
   }
   $configured = TRUE;
 
-  $template =& CRM_Core_Smarty::singleton();
+  $template = & CRM_Core_Smarty::singleton();
 
   $extRoot = dirname(__FILE__) . DIRECTORY_SEPARATOR;
   $extDir = $extRoot . 'templates';
@@ -167,6 +167,7 @@ function _mappins_civix_find_files($dir, $pattern) {
       while (FALSE !== ($entry = readdir($dh))) {
         $path = $subdir . DIRECTORY_SEPARATOR . $entry;
         if ($entry{0} == '.') {
+
         }
         elseif (is_dir($path)) {
           $todos[] = $path;
@@ -177,6 +178,7 @@ function _mappins_civix_find_files($dir, $pattern) {
   }
   return $result;
 }
+
 /**
  * (Delegated) Implements hook_civicrm_managed().
  *
@@ -283,9 +285,9 @@ function _mappins_civix_insert_navigation_menu(&$menu, $path, $item) {
   if (empty($path)) {
     $menu[] = array(
       'attributes' => array_merge(array(
-        'label'      => CRM_Utils_Array::value('name', $item),
-        'active'     => 1,
-      ), $item),
+        'label' => CRM_Utils_Array::value('name', $item),
+        'active' => 1,
+                                                                                          ), $item),
     );
     return TRUE;
   }
