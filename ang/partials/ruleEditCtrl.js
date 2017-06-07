@@ -75,11 +75,17 @@
     }
     
     var goToDestination = function goToDestination() {
-      var query = {}
-      if ($routeParams.tabName == 'allRules') {
-        query.tid = 1;
+      var destination;
+      if (typeof $routeParams.destination != 'undefined' && $routeParams.destination.length) {
+        var query = {}
+        query.tid = $routeParams.destinationTab;
+        destination = CRM.url('civicrm/a/#' + $routeParams.destination, query);
       }
-      $window.location.href = CRM.url('civicrm/a/#' + $routeParams.destination, query);
+      else {
+        destination = CRM.url('civicrm/a/#/mappins/rules');        
+      }
+      $window.location.href = destination;
+
     };
 
     $scope.save = function save() {

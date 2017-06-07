@@ -19,7 +19,7 @@
   //   dialogService -- provided by CiviCRM
   //   $q, $timeout -- provided by angular.
   //   myContact -- The current contact, defined above in config().
-  angular.module('mappins').controller('Mappinsrules', function($scope, crmApi, crmStatus, crmUiHelp, dialogService, $q, $timeout, $location, $routeParams, $rootScope) {
+  angular.module('mappins').controller('Mappinsrules', function($scope, crmApi, crmStatus, crmUiHelp, dialogService, $q, $timeout, $location, $routeParams, $window) {
 
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('mappins');
@@ -33,9 +33,6 @@
      *   provided by, for example, crmApi('MappinsRule', 'getsingle').
      */
     var addActionMethods = function addActionMethods(obj) {
-      obj.edit = function edit() {
-        $scope.openRuleForm(this);    
-      };
       
       obj.disable = function disable() {
         var rule = this;
@@ -221,6 +218,20 @@
       else {
         return '';
       }
+    }
+    
+    $scope.openEditForm = function openEditForm(ruleId) {
+      ruleId = (typeof ruleId == 'undefined' ? 'add' : ruleId);
+      var activeTabId = $('div.crm-tabset.ui-tabs').tabs("option")['active'];
+      var path = 'civicrm/a/#/mappins/rule/' + ruleId
+      var query = {
+        'destination': '/mappins/rules/' + $scope.selectedProfile.id,
+        'destinationTab': activeTabId
+      }
+      destination = CRM.url(path, query);
+      console.log(destination);
+//      return;
+      $window.location.href = destination;
     }
     
     $scope.$watch('selectedProfile', function() {

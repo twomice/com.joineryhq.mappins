@@ -1,5 +1,5 @@
 <div class="crm-container">
-<button crm-icon="fa-plus-circle" ng-click="$location.path('/mappins/rule/add')">Add Rule</button>
+<button crm-icon="fa-plus-circle" ng-click="openEditForm()">Add Rule</button>
   <div crm-ui-debug="profiles"></div>
   <h1 crm-page-title>{{ts('Map Pin Rules')}}</h1>
 
@@ -68,7 +68,7 @@
         </table>        
       </div>
     </div>
-    <div id="mappinsRule-tab-all" crm-ui-tab crm-title="ts('All')" ng-click="window.alert('a');">
+    <div id="mappinsRule-tab-all" crm-ui-tab crm-title="ts('All')"">
       <div crm-ui-debug="allRules"></div>
         <table class="display" ng-if="! _.isEmpty(allRules)">
           <thead>

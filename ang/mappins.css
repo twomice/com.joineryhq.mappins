@@ -2,7 +2,7 @@
 
 /* Disabled rows have visually toned-down images */
 tr.disabled a.crm-mappins-rule-image-button {
-  opacity: .25;
+  opacity: .5;
   filter: grayscale(50%);
   -webkit-filter: grayscale(.5);
 }
