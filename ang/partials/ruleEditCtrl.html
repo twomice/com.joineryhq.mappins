@@ -60,8 +60,10 @@
     </tr>
     <tr class="crm-relationship-type-form-block-is_active">
         <td class="label">{{ts('Active')}}</td>
-        <td><input type="text" ng-model="rule.is_active"><br />
-        <span class="description">{{ts('Is this rule active?')}}</span></td>
+        <td>
+          <input type="checkbox" ng-model="rule.is_active" parse-int ng-true-value="'1'" ng-false-value="'0'" />
+          <span class="description">{{ts('Is this rule active?')}}</span>
+        </td>
     </tr>
   </table>
   <button crm-icon="fa-check" ng-click="save();">Save</button>
