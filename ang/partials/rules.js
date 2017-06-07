@@ -96,18 +96,7 @@
     $scope.loadSelectedProfileRules = function loadSelectedProfileRules() {
       if (typeof $scope.selectedProfile == 'undefined') {
         return;
-      }
-      
-//      if ($scope.selectedProfile.id > 0) {
-//        $scope.rules.selectedProfile = _.filter($scope.allRules, function(rule){
-//          return (rule.uf_group_id.indexOf($scope.selectedProfile.id) > -1);
-//        });
-//      }
-//      $scope.rules.unassigned = _.filter($scope.allRules, function(rule){
-//        return (rule.uf_group_id.indexOf(0) > -1);
-//      });
-//      return;
-      
+      }      
       
       var baseParams = {
         "options": {
@@ -120,7 +109,7 @@
         }
       }
       
-      if ($scope.selectedProfile.id > 0) {
+      if ($scope.selectedProfile.id > 0) {       
         selectedProfileParams = baseParams;
         selectedProfileParams.uf_group_id = $scope.selectedProfile.id;
         var apiProfiles = crmApi('MappinsRuleProfile', 'get', selectedProfileParams);
@@ -192,7 +181,7 @@
           addActionMethods($scope.allRules[i]);          
           for (u in $scope.allRules[i].uf_group_id) {
             if ($scope.allRules[i].uf_group_id[u] == 'NULL') {
-              $scope.allRules[i].uf_group_id[u] = 0;
+              $scope.allRules[i].uf_group_id[u] = '0';
             }
           }
         }
@@ -247,12 +236,13 @@
     .then(function(values){
       profiles = values[0].values;
       profiles.push({
-        'id': 0,
+        'id': '0',
         'title': '(All profiles / fallback)'
       });
       $scope.profiles = profiles;
-      // Set the page to start with "All profiles / fallback":
-      $scope.selectedProfile = _.findWhere($scope.profiles, {'id': $routeParams.profileId});
+      // Set the page to start with "All profiles / fallback" if none is specified:
+      var defaultProfileId = ($routeParams.profileId || '0');
+      $scope.selectedProfile = _.findWhere($scope.profiles, {'id': defaultProfileId});
     });
     
     $scope.rules = {};

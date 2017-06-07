@@ -33,7 +33,7 @@
               ng-repeat="(key, value) in rules.selectedProfile"
               ng-class="{'disabled': value.rule.is_active == 0}"
               ng-include="'~/mappins/blockRuleRow.html'"
-              ng-init="viewName = 'selectedProfile'; rule=value.rule; ruleProfile=value;"
+              ng-init="viewName = 'selectedProfile'; rule=value.rule; ruleProfile=value; tabName = 'perProfile';"
               ng-class-even="'even-row'"
               ng-class-odd="'odd-row'"
             ></tr>
@@ -60,7 +60,7 @@
               ng-repeat="(key, value) in rules.unassigned"
               ng-class="{'disabled': value.rule.is_active == 0}"
               ng-include="'~/mappins/blockRuleRow.html'"
-              ng-init="viewName = 'unassigned'; rule=value.rule; ruleProfile=value;"
+              ng-init="viewName = 'unassigned'; rule=value.rule; ruleProfile=value; tabName = 'perProfile';"
               ng-class-even="'even-row'"
               ng-class-odd="'odd-row'"
             ></tr>

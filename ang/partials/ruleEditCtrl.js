@@ -8,15 +8,15 @@
         // If you need to look up data when opening the page, list it out
         // under "resolve".
         resolve: {
-          mappinsRuleProfiles: function(crmApi, $route) {
+          rule: function(crmApi, $route) {
             var rule_id = $route.current.params.id;
             if (
               !isNaN(rule_id) && 
               parseInt(Number(rule_id)) == rule_id && 
               !isNaN(parseInt(rule_id, 10))
             ){
-              return crmApi('mappinsRuleProfile', 'get', {
-                rule_id: rule_id,
+              return crmApi('mappinsRule', 'get', {
+                id: rule_id,
                 sequential: 1
               });              
             }
@@ -39,30 +39,25 @@
   //   $scope -- This is the set of variables shared between JS and HTML.
   //   crmApi, crmStatus, crmUiHelp -- These are services provided by civicrm-core.
   //   myContact -- The current contact, defined above in config().
-  angular.module('mappins').controller('MappinsruleEditCtrl', function($scope, crmApi, crmStatus, crmUiHelp, mappinsRuleProfiles, profiles, $routeParams, $location, $window) {
+  angular.module('mappins').controller('MappinsruleEditCtrl', function($scope, crmApi, crmStatus, crmUiHelp, rule, profiles, $routeParams, $location, $window) {
 
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('mappins');
     var hs = $scope.hs = crmUiHelp({file: 'CRM/mappins/ruleEditCtrl'}); // See: templates/CRM/mappins/ruleEditCtrl.hlp
 
-    // We have myContact available in JS. We also want to reference it in HTML.
-//    $scope.myContact = myContact;
-    
     profiles.values.push({
-      'id': 0,
+      'id': '0',
       'title': '(All profiles / fallback)'
     });    
-    $scope.profiles = profiles.values;
+    $scope.profiles = profiles.values;    
     
-    if (_.isObject(mappinsRuleProfiles)) {
-      $scope.rule = mappinsRuleProfiles.values[0];
-      $scope.rule.id = $scope.rule.rule_id;
-      var uf_group_ids = [];
-      for (i in mappinsRuleProfiles.values) {
-        var uf_group_id = mappinsRuleProfiles.values[i].uf_group_id || 0;
-        uf_group_ids.push(uf_group_id);
-      }
-      $scope.rule.uf_group_id = uf_group_ids;
+    if (_.isObject(rule)) {
+      $scope.rule = rule.values[0];
+      for (i in $scope.rule.uf_group_id) {
+        if ($scope.rule.uf_group_id[i] == 'NULL') {
+          $scope.rule.uf_group_id[i] = '0';
+        }
+      }    
     }
     else {
       $scope.rule = {};
@@ -81,7 +76,7 @@
     
     var goToDestination = function goToDestination() {
       var query = {}
-      if ($routeParams.viewName == 'allRules') {
+      if ($routeParams.tabName == 'allRules') {
         query.tid = 1;
       }
       $window.location.href = CRM.url('civicrm/a/#' + $routeParams.destination, query);

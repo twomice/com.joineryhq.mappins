@@ -45,20 +45,35 @@ function _civicrm_api3_mappins_rule_create_mappins_rule_profile($params, $rule) 
       
       // Compile lists of entities to create.
       $to_create = $uf_group_ids;
-      foreach ($rule_profile_result['values'] as $rule_profile_value) {
-        if (!in_array($rule_profile_value['uf_group_id'], $uf_group_ids)) {
-          // Existing entity is not in uf_group_ids, so delete it
-          civicrm_api3('MappinsRuleProfile', 'delete', array(
-            'id' => $rule_profile_value['id'],
-          ));
-        }
-        else {
-          // Existing entity IS in uf_group_ids, so no need create it. Remove it
+      foreach ($rule_profile_result['values'] as $rule_profile_value) {          
+        if (in_array($rule_profile_value['uf_group_id'], $uf_group_ids)) {
+          // Existing entity IS in uf_group_ids.
+          // No need create this one, it already exists and should. Just remove it
           // from the list of entities to create.
           $existing_uf_group_id = $rule_profile_value['uf_group_id'];
           if(($index = array_search($existing_uf_group_id, $to_create)) !== false) {
             unset($to_create[$index]);
           }          
+        }
+        elseif((
+            // Handle this odd case: If $rule_profile_value['uf_group_id'] is null
+            // or not set, it represents an "all profiles" rule; also, the presence
+            // of "0" in $uf_group_ids represents that it should be saved as
+            // an "all profiles" rule, so we can leave things alone if those two
+            // things are true.
+            empty($rule_profile_value['uf_group_id']) && in_array(0, $uf_group_ids)
+          )
+        ) {        
+          $existing_uf_group_id = 0;
+          if(($index = array_search($existing_uf_group_id, $to_create)) !== false) {
+            unset($to_create[$index]);
+          }          
+        }
+        else {          
+          // Existing entity is not in uf_group_ids, so delete it
+          civicrm_api3('MappinsRuleProfile', 'delete', array(
+            'id' => $rule_profile_value['id'],
+          ));
         }
       }
       foreach ($to_create as $uf_group_id) {
