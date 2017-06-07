@@ -60,7 +60,10 @@
       }    
     }
     else {
-      $scope.rule = {};
+      console.log('default, add.')
+      $scope.rule = {
+        'is_active': '1'
+      };
     }
     
     $scope.criteriaOptions = {
@@ -92,7 +95,7 @@
       return crmStatus(
         // Status messages. For defaults, just use "{}"
         {start: ts('Saving...'), success: ts('Saved')},
-        // The save action. Note that crmApi() returns a promise.        
+        // The save action. Note that crmApi() returns a promise.                
         crmApi('MappinsRule', 'create', $scope.rule)
         .then(function(values) {
           goToDestination();
