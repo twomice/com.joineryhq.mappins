@@ -36,7 +36,6 @@
       <type>Select</type>
     </html>
     <type>int unsigned</type>
-    <required>true</required>
     <comment>Rule applies only to these profiles. Implicit FK to civicrm_uf_group.id</comment>
     <add>4.7</add>
   </field>
