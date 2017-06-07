@@ -226,8 +226,8 @@
       var activeTabId = $('div.crm-tabset.ui-tabs').tabs("option")['active'];
       var path = 'civicrm/a/#/mappins/rule/' + ruleId
       var query = {
-        'destination': '/mappins/rules/' + $scope.selectedProfile.id,
-        'destinationTab': activeTabId
+        'destinationPid': $scope.selectedProfile.id,
+        'destinationTid': activeTabId
       }
       destination = CRM.url(path, query);
       $window.location.href = destination;

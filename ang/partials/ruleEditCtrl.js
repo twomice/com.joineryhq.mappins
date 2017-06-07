@@ -81,8 +81,8 @@
       var destination;
       if (typeof $routeParams.destination != 'undefined' && $routeParams.destination.length) {
         var query = {}
-        query.tid = $routeParams.destinationTab;
-        destination = CRM.url('civicrm/a/#' + $routeParams.destination, query);
+        query.tid = $routeParams.destinationTid;
+        destination = CRM.url('civicrm/a/#/mappins/rules/' + $routeParams.destinationPid, query);
       } 
       else {
         destination = CRM.url('civicrm/a/#/mappins/rules');
