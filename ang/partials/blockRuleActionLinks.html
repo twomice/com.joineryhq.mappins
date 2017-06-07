@@ -25,7 +25,7 @@
 <a
   class="action-item crm-hover-button"
   href=""
-  crm-confirm="{message: ts('Delete <em>Rule %1</em> from all profiles?', {1: rule.id})}" on-yes="rule.del($index, viewName);"
+  crm-confirm="{message: ts('Delete <em>Rule %1</em> from all profiles?', {1: rule.id})}" on-yes="rule.del();"
 >
   {{ts('Delete')}}  
 </a>

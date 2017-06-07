@@ -64,17 +64,18 @@
         });
      };
       
-      obj.del = function del(index, viewName) {
+      obj.del = function del() {
         rule = this;
         
         return crmStatus(
           // Status messages. For defaults, just use "{}"
           {start: ts('Deleting...'), success: ts('Deleted')},
           crmApi('MappinsRule', 'delete', {
-            id: rule.rule_id,
+            id: rule.id,
           })
         )
         .then(function(result) {
+          $scope.loadAll();
           $scope.loadSelectedProfileRules();
         });
       };
@@ -229,8 +230,6 @@
         'destinationTab': activeTabId
       }
       destination = CRM.url(path, query);
-      console.log(destination);
-//      return;
       $window.location.href = destination;
     }
     
