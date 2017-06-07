@@ -38,34 +38,34 @@
       };
       
       obj.disable = function disable() {
-        rule = this;
+        var rule = this;
         return crmStatus(
           // Status messages. For defaults, just use "{}"
           {start: ts('Disabling...'), success: ts('Disabled')},
           crmApi('MappinsRule', 'create', {
-            id: rule.rule_id,
+            id: rule.id,
             is_active: 0
           })
         )
         .then(function(result){
-          rule.is_active = 0;            
+          rule.is_active = 0;
         });
       };
       
       obj.enable = function enable() {
-        rule = this;
+        var rule = this;
         return crmStatus(
           // Status messages. For defaults, just use "{}"
           {start: ts('Enabling...'), success: ts('Enabled')},
           crmApi('MappinsRule', 'create', {
-            id: rule.rule_id,
+            id: rule.id,
             is_active: 1
           })
         )
-        .then(function(result){
-          rule.is_active = 1;            
+        .then(function(result){         
+          rule.is_active = 1;
         });
-      };
+     };
       
       obj.del = function del(index, viewName) {
         rule = this;
@@ -130,8 +130,7 @@
           // relevant properties.
           var ruleProfiles = $.map(values[0].values, function(value, index) {
             value.rule = _.findWhere($scope.allRules, {"id": value.rule_id});
-            addActionMethods(value);
-            return [value];
+            return value;
           });
           // Sort the rows here. See comment in baseParams for some rationale.
           ruleProfiles.sort(function(a, b){
@@ -150,8 +149,7 @@
           // relevant properties.
           var ruleProfiles = $.map(values[0].values, function(value, index) {
             value.rule = _.findWhere($scope.allRules, {"id": value.rule_id});
-            addActionMethods(value);
-            return [value];
+            return value;
           });
           // Sort the rows here. See comment in baseParams for some rationale.
           ruleProfiles.sort(function(a, b){
@@ -191,6 +189,7 @@
       .then(function(values){
         $scope.allRules = values[0].values;
         for (i in $scope.allRules) {
+          addActionMethods($scope.allRules[i]);          
           for (u in $scope.allRules[i].uf_group_id) {
             if ($scope.allRules[i].uf_group_id[u] == 'NULL') {
               $scope.allRules[i].uf_group_id[u] = 0;

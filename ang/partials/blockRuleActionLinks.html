@@ -8,7 +8,7 @@
   ng-if="(rule.is_active == '0')"
   class="action-item crm-hover-button"
   href=""
-  crm-confirm="{message: ts('Enable <em>Rule %1</em> in all profiles?', {1: rule.rule_id})}" on-yes="rule.enable();"
+  crm-confirm="{message: ts('Enable <em>Rule %1</em> in all profiles?', {1: rule.id})}" on-yes="rule.enable();"
 >
   {{ts('Enable')}}
 </a>
@@ -17,7 +17,7 @@
   ng-if="(rule.is_active == '1')"
   class="action-item crm-hover-button"
   href=""
-  crm-confirm="{message: ts('Disable <em>Rule %1</em> in all profiles?', {1: rule.rule_id})}" on-yes="rule.disable();"
+  crm-confirm="{message: ts('Disable <em>Rule %1</em> in all profiles?', {1: rule.id})}" on-yes="rule.disable();"
 >
   {{ts('Disable')}}
 </a>
@@ -25,7 +25,7 @@
 <a
   class="action-item crm-hover-button"
   href=""
-  crm-confirm="{message: ts('Delete <em>Rule %1</em> from all profiles?', {1: rule.rule_id})}" on-yes="rule.del($index, viewName);"
+  crm-confirm="{message: ts('Delete <em>Rule %1</em> from all profiles?', {1: rule.id})}" on-yes="rule.del($index, viewName);"
 >
   {{ts('Delete')}}  
 </a>
