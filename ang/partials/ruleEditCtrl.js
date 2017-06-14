@@ -82,16 +82,22 @@
     };
 
     $scope.save = function save() {
+      // If uf_group_id is undefined, set it to an empty array; otherwise,
+      // the API will assume there's nothing to save regarding uf_group_id, whereas
+      // in this case we specifically want it set to an empty array.
+      if (typeof $scope.rule.uf_group_id == 'undefined') {
+        $scope.rule.uf_group_id = [];
+      }
       return crmStatus(
-              // Status messages. For defaults, just use "{}"
-                      {start: ts('Saving...'), success: ts('Saved')},
-                      // The save action. Note that crmApi() returns a promise.
-                      crmApi('MappinsRule', 'create', $scope.rule)
-                      .then(function (values) {
-                        goToDestination();
-                      })
-                      );
-            };
+        // Status messages. For defaults, just use "{}"
+        {start: ts('Saving...'), success: ts('Saved')},
+        // The save action. Note that crmApi() returns a promise.
+        crmApi('MappinsRule', 'create', $scope.rule)
+        .then(function (values) {
+          goToDestination();
+        })
+      );
+    };
 
     $scope.openKCFinder = function openKCFinder(index, viewName) {
       window.KCFinder = {
