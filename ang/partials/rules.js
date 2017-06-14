@@ -89,7 +89,7 @@
     
     $scope.setSelectedProfile = function setSelectedProfile(profile) {
       $scope.selectedProfile = profile;
-    }
+    };
     
     $scope.loadSelectedProfileRules = function loadSelectedProfileRules() {
       if (typeof $scope.selectedProfile == 'undefined') {
@@ -105,7 +105,7 @@
           // Since we don't use 'serialize', the 'sort' parameter doesn't work;
           // I'm not sure why that is.
         }
-      }
+      };
       
       if ($scope.selectedProfile.id > 0) {       
         selectedProfileParams = baseParams;
@@ -122,7 +122,7 @@
           // Sort the rows here. See comment in baseParams for some rationale.
           ruleProfiles.sort(function(a, b){
             return a.weight > b.weight;
-          })
+          });
           $scope.rules.selectedProfile = ruleProfiles;
         });      
       }
@@ -141,14 +141,11 @@
           // Sort the rows here. See comment in baseParams for some rationale.
           ruleProfiles.sort(function(a, b){
             return a.weight > b.weight;
-          })
+          });
         
         $scope.rules.unassigned = ruleProfiles;
       });      
-
-
-      
-    }
+    };
     
     $scope.saveWeights = function saveWeights(e, ui) {
       if (e.target.id == 'selectedProfileRules') {
@@ -165,7 +162,7 @@
         };
         CRM.api3('MappinsRuleProfile', 'create', params, ts('Order saved'));
       }
-    }
+    };
     
     $scope.loadAll = function loadAll() {
       var apiRules = crmApi('MappinsRule', 'get', {
@@ -175,16 +172,16 @@
       $q.all([apiRules])
       .then(function(values){
         $scope.allRules = values[0].values;
-        for (i in $scope.allRules) {
+        for (var i in $scope.allRules) {
           addActionMethods($scope.allRules[i]);          
-          for (u in $scope.allRules[i].uf_group_id) {
+          for (var u in $scope.allRules[i].uf_group_id) {
             if ($scope.allRules[i].uf_group_id[u] == 'NULL') {
               $scope.allRules[i].uf_group_id[u] = '0';
             }
           }
         }
       });      
-    }
+    };
     
     $scope.openKCFinder = function openKCFinder(rule) {
       window.KCFinder = {
@@ -206,7 +203,7 @@
         'kcfinder_textbox_image_url',
         'status=0, toolbar=0, location=0, menubar=0, directories=0, resizable=1, scrollbars=0, width=800, height=600'
       );
-    }
+    };
     
     $scope.getProfileTitle = function getProfileTitle(profileId) {
       if (typeof profileId == 'undefined') {
@@ -219,19 +216,19 @@
       else {
         return '';
       }
-    }
+    };
     
     $scope.openEditForm = function openEditForm(ruleId) {
       ruleId = (typeof ruleId == 'undefined' ? 'add' : ruleId);
-      var activeTabId = $('div.crm-tabset.ui-tabs').tabs("option")['active'];
-      var path = 'civicrm/a/#/mappins/rule/' + ruleId
+      var activeTabId = $('div.crm-tabset.ui-tabs').tabs("option").active;
+      var path = 'civicrm/a/#/mappins/rule/' + ruleId;
       var query = {
         'destinationPid': $scope.selectedProfile.id,
         'destinationTid': activeTabId
-      }
+      };
       destination = CRM.url(path, query);
       $window.location.href = destination;
-    }
+    };
     
     $scope.$watch('selectedProfile', function() {
       $scope.loadSelectedProfileRules();      
@@ -269,7 +266,7 @@
     // Pass the active tab index to $scope so crm-ui-tabs can use it.
     $scope.myTabSetOptions = {
       "active": $routeParams.tid
-    }
+    };
         
   });
   

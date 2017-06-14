@@ -53,14 +53,13 @@
 
     if (_.isObject(rule)) {
       $scope.rule = rule.values[0];
-      for (i in $scope.rule.uf_group_id) {
+      for (var i in $scope.rule.uf_group_id) {
         if ($scope.rule.uf_group_id[i] == 'NULL') {
           $scope.rule.uf_group_id[i] = '0';
         }
       }
     } 
     else {
-      console.log('default, add.')
       $scope.rule = {
         'is_active': '1'
       };
@@ -75,12 +74,12 @@
     // Pass $window service so we can use it in Cancel button ng-click.
     $scope.cancel = function cancel() {
       goToDestination();
-    }
+    };
 
     var goToDestination = function goToDestination() {
       var destination;
       if (typeof $routeParams.destination != 'undefined' && $routeParams.destination.length) {
-        var query = {}
+        var query = {};
         query.tid = $routeParams.destinationTid;
         destination = CRM.url('civicrm/a/#/mappins/rules/' + $routeParams.destinationPid, query);
       } 
@@ -117,7 +116,7 @@
               'kcfinder_textbox_image_url',
               'status=0, toolbar=0, location=0, menubar=0, directories=0, resizable=1, scrollbars=0, width=800, height=600'
               );
-    }
+    };
 
   });
 
