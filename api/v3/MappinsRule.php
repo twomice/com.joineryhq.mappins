@@ -51,7 +51,7 @@ function _civicrm_api3_mappins_rule_create_mappins_rule_profile($params, $rule) 
           // No need create this one, it already exists and should. Just remove it
           // from the list of entities to create.
           $existing_uf_group_id = $rule_profile_value['uf_group_id'];
-          if (($index = array_search($existing_uf_group_id, $to_create)) !== false) {
+          if (($index = array_search($existing_uf_group_id, $to_create)) !== FALSE) {
             unset($to_create[$index]);
           }
         }
@@ -65,7 +65,7 @@ function _civicrm_api3_mappins_rule_create_mappins_rule_profile($params, $rule) 
           )
         ) {
           $existing_uf_group_id = 0;
-          if (($index = array_search($existing_uf_group_id, $to_create)) !== false) {
+          if (($index = array_search($existing_uf_group_id, $to_create)) !== FALSE) {
             unset($to_create[$index]);
           }
         }
@@ -140,8 +140,7 @@ function _civicrm_api3_mappins_rule_get_with_uf_group_id($params) {
   $sql = CRM_Utils_SQL_Select::fragment();
   $sql
     ->join('civicrm_mappins_rule_profile', 'LEFT JOIN civicrm_mappins_rule_profile rp ON rp.rule_id = a.id')
-    ->groupBy('a.id')
-  ;
+    ->groupBy('a.id');
   $rule_dao_name = CRM_Core_DAO_AllCoreTables::getClassForTable('civicrm_mappins_rule');
   $result = _civicrm_api3_mappins_rule_basic_get($rule_dao_name, $params, TRUE, "", $sql, FALSE);
 
@@ -181,7 +180,7 @@ function _civicrm_api3_mappins_rule_basic_get($bao_name, $params, $returnAsSucce
   $entity = CRM_Core_DAO_AllCoreTables::getBriefName(str_replace('_BAO_', '_DAO_', $bao_name));
   $options = _civicrm_api3_get_options_from_params($params);
 
-  require_once('Civi/API/Mappins/Api3SelectQuery.php');
+  require_once 'Civi/API/Mappins/Api3SelectQuery.php';
   $query = new \Civi\API\Mappins\Api3SelectQuery($entity, CRM_Utils_Array::value('check_permissions', $params, FALSE));
   $query->where = $params;
   if ($options['is_count']) {
