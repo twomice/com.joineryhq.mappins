@@ -221,13 +221,7 @@
     $scope.openEditForm = function openEditForm(ruleId) {
       ruleId = (typeof ruleId == 'undefined' ? 'add' : ruleId);
       var activeTabId = $('div.crm-tabset.ui-tabs').tabs("option").active;
-      var path = 'civicrm/a/#/mappins/rule/' + ruleId;
-      var query = {
-        'destinationPid': $scope.selectedProfile.id,
-        'destinationTid': activeTabId
-      };
-      destination = CRM.url(path, query);
-      $window.location.href = destination;
+      $location.path('/mappins/rule/' + ruleId).search({'destinationPid': $scope.selectedProfile.id, 'destinationTid': activeTabId});
     };
     
     $scope.$watch('selectedProfile', function() {

@@ -11,10 +11,10 @@
         rule: function (crmApi, $route) {
           var rule_id = $route.current.params.id;
           if (
-                  !isNaN(rule_id) &&
-                  parseInt(Number(rule_id)) == rule_id &&
-                  !isNaN(parseInt(rule_id, 10))
-                  ) {
+            !isNaN(rule_id) &&
+            parseInt(Number(rule_id)) == rule_id &&
+            !isNaN(parseInt(rule_id, 10))
+          ) {
             return crmApi('mappinsRule', 'get', {
               id: rule_id,
               sequential: 1
@@ -77,17 +77,8 @@
     };
 
     var goToDestination = function goToDestination() {
-      var destination;
-      if (typeof $routeParams.destination != 'undefined' && $routeParams.destination.length) {
-        var query = {};
-        query.tid = $routeParams.destinationTid;
-        destination = CRM.url('civicrm/a/#/mappins/rules/' + $routeParams.destinationPid, query);
-      } 
-      else {
-        destination = CRM.url('civicrm/a/#/mappins/rules');
-      }
-      $window.location.href = destination;
-
+      $location.search({});
+      $location.path('/mappins/rules/' + $routeParams.destinationPid).search('tid', $routeParams.destinationTid);
     };
 
     $scope.save = function save() {
