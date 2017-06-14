@@ -41,7 +41,7 @@
   </field>
   <field>
     <name>is_active</name>
-    <title>Is Active</title>
+    <title>Is Enabled</title>
     <type>boolean</type>
     <default>1</default>
     <comment>Is this mappins_rule enabled</comment>

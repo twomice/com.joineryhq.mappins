@@ -287,7 +287,7 @@ function _mappins_civix_insert_navigation_menu(&$menu, $path, $item) {
       'attributes' => array_merge(array(
         'label' => CRM_Utils_Array::value('name', $item),
         'active' => 1,
-                                                                                          ), $item),
+      ), $item),
     );
     return TRUE;
   }

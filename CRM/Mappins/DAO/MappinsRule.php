@@ -147,7 +147,7 @@ class CRM_Mappins_DAO_MappinsRule extends CRM_Core_DAO {
         'is_active' => array(
           'name' => 'is_active',
           'type' => CRM_Utils_Type::T_BOOLEAN,
-          'title' => ts('Is Active') ,
+          'title' => ts('Is Enabled') ,
           'description' => 'Is this mappins_rule enabled',
           'default' => '1',
           'table_name' => 'civicrm_mappins_rule',
