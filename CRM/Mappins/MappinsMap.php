@@ -153,7 +153,7 @@ class CRM_Mappins_MappinsMap {
 
       case 'contact_sub_type':
         $subtypes = CRM_Contact_BAO_Contact::buildOptions('contact_sub_type', 'create');
-        if (!in_array($rule['value'], $subtypes)) {
+        if (!array_key_exists($rule['value'], $subtypes)) {
           return FALSE;
         }
         $entity = 'Contact';
@@ -188,7 +188,14 @@ class CRM_Mappins_MappinsMap {
     }
 
     $rule_profile_result = civicrm_api3('MappinsRuleProfile', 'get', $params);
-    return $rule_profile_result['values'];
+    $rules = $rule_profile_result['values'];
+    // FIXME: would really be nice if the API could filter for is_active.
+    foreach ($rules as $index => $rule) {
+      if (!(int)$rule['is_active']) {
+        unset($rules[$index]);
+      }
+    }
+    return $rules;
   }
 
 }
