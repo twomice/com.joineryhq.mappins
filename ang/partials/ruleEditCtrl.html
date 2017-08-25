@@ -3,6 +3,7 @@
   <div crm-ui-debug="mappinsRuleProfiles"></div>
   <div crm-ui-debug="rule"></div>
   <div crm-ui-debug="profiles"></div>
+  <div crm-ui-debug="criteriaOptions"></div>
 
   <table class="form-layout-compressed">
     <tr class="crm-relationship-type-form-block-id" ng-if="rule.id">
@@ -15,7 +16,7 @@
         <select
           required
           ng-model="rule.criteria"
-          ng-options="key as value for (key, value) in criteriaOptions | orderBy:'label'"
+          ng-options="key as value for (key, value) in criteriaOptions"
           >
         </select><br />
         <span class="description">{{ts('The attribute of the mapped contact to check.')}}</span></td>

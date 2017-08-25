@@ -46,7 +46,7 @@ function _civicrm_api3_mappins_rule_create_mappins_rule_profile($params, $rule) 
       // Compile lists of entities to create.
       $to_create = $uf_group_ids;
       foreach ($rule_profile_result['values'] as $rule_profile_value) {
-        if (in_array($rule_profile_value['uf_group_id'], $uf_group_ids)) {
+        if (!empty($rule_profile_value['uf_group_id']) && in_array($rule_profile_value['uf_group_id'], $uf_group_ids)) {
           // Existing entity IS in uf_group_ids.
           // No need create this one, it already exists and should. Just remove it
           // from the list of entities to create.
