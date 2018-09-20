@@ -231,7 +231,10 @@
     // FIXME: probably should do this in resolve:{}.
     var apiProfiles = crmApi('uf_group', 'get', {
       return: ['id', 'title'],
-      sequential: 1
+      sequential: 1,
+      options: {
+        limit: 0
+      }
     });
     $q.all([apiProfiles])
     .then(function(values){
