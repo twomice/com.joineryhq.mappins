@@ -16,14 +16,14 @@ class CRM_Mappins_MappinsMap {
    * The CiviCRM Profile gid (civicrm_uf_group.id) for the profile that
    * powers this map.
    *
-   * @var Int
+   * @var int
    */
   protected $gid;
 
   /**
    * The MappinsRules that should apply on this map.
    *
-   * @var Array
+   * @var array
    */
   protected $rules;
 
@@ -191,7 +191,7 @@ class CRM_Mappins_MappinsMap {
     $rules = $rule_profile_result['values'];
     // FIXME: would really be nice if the API could filter for is_active.
     foreach ($rules as $index => $rule) {
-      if (!(int)$rule['is_active']) {
+      if (!(int) $rule['is_active']) {
         unset($rules[$index]);
       }
     }

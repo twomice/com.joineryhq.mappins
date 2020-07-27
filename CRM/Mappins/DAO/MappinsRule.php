@@ -23,7 +23,7 @@
 | GNU Affero General Public License or the licensing of CiviCRM,     |
 | see the CiviCRM license FAQ at http://civicrm.org/licensing        |
 +--------------------------------------------------------------------+
-*/
+ */
 /**
  * @package CRM
  * @copyright CiviCRM LLC (c) 2004-2017
@@ -43,13 +43,13 @@ class CRM_Mappins_DAO_MappinsRule extends CRM_Core_DAO {
    *
    * @var string
    */
-  static $_tableName = 'civicrm_mappins_rule';
+  public static $_tableName = 'civicrm_mappins_rule';
   /**
    * Should CiviCRM log any modifications to this table in the civicrm_log table.
    *
-   * @var boolean
+   * @var bool
    */
-  static $_log = true;
+  public static $_log = TRUE;
   /**
    * Unique MappinsRule ID
    *
@@ -77,73 +77,75 @@ class CRM_Mappins_DAO_MappinsRule extends CRM_Core_DAO {
   /**
    * Is this mappins_rule enabled
    *
-   * @var boolean
+   * @var bool
    */
   public $is_active;
+
   /**
    * Class constructor.
    */
-  function __construct() {
+  public function __construct() {
     $this->__table = 'civicrm_mappins_rule';
     parent::__construct();
   }
+
   /**
    * Returns all the column names of this table
    *
    * @return array
    */
-  static function &fields() {
+  public static function &fields() {
     if (!isset(Civi::$statics[__CLASS__]['fields'])) {
       Civi::$statics[__CLASS__]['fields'] = array(
         'id' => array(
           'name' => 'id',
           'type' => CRM_Utils_Type::T_INT,
           'description' => 'Unique MappinsRule ID',
-          'required' => true,
+          'required' => TRUE,
           'table_name' => 'civicrm_mappins_rule',
           'entity' => 'MappinsRule',
           'bao' => 'CRM_Mappins_DAO_MappinsRule',
           'localizable' => 0,
-        ) ,
+        ),
         'criteria' => array(
           'name' => 'criteria',
           'type' => CRM_Utils_Type::T_STRING,
           'title' => ts('Criteria') ,
           'description' => 'Type of rule (e.g., group, tag)',
-          'required' => true,
+          'required' => TRUE,
           'maxlength' => 255,
           'size' => CRM_Utils_Type::HUGE,
           'table_name' => 'civicrm_mappins_rule',
           'entity' => 'MappinsRule',
           'bao' => 'CRM_Mappins_DAO_MappinsRule',
           'localizable' => 0,
-        ) ,
+        ),
         'value' => array(
           'name' => 'value',
           'type' => CRM_Utils_Type::T_STRING,
           'title' => ts('Value') ,
           'description' => 'Value to filter on',
-          'required' => true,
+          'required' => TRUE,
           'maxlength' => 255,
           'size' => CRM_Utils_Type::HUGE,
           'table_name' => 'civicrm_mappins_rule',
           'entity' => 'MappinsRule',
           'bao' => 'CRM_Mappins_DAO_MappinsRule',
           'localizable' => 0,
-        ) ,
+        ),
         'image_url' => array(
           'name' => 'image_url',
           'type' => CRM_Utils_Type::T_STRING,
           'title' => ts('Image Url') ,
           'description' => 'URL for pin image',
-          'required' => true,
+          'required' => TRUE,
           'maxlength' => 255,
           'size' => CRM_Utils_Type::HUGE,
           'table_name' => 'civicrm_mappins_rule',
           'entity' => 'MappinsRule',
           'bao' => 'CRM_Mappins_DAO_MappinsRule',
           'localizable' => 0,
-        ) ,
+        ),
         'is_active' => array(
           'name' => 'is_active',
           'type' => CRM_Utils_Type::T_BOOLEAN,
@@ -154,40 +156,44 @@ class CRM_Mappins_DAO_MappinsRule extends CRM_Core_DAO {
           'entity' => 'MappinsRule',
           'bao' => 'CRM_Mappins_DAO_MappinsRule',
           'localizable' => 0,
-        ) ,
+        ),
       );
       CRM_Core_DAO_AllCoreTables::invoke(__CLASS__, 'fields_callback', Civi::$statics[__CLASS__]['fields']);
     }
     return Civi::$statics[__CLASS__]['fields'];
   }
+
   /**
    * Return a mapping from field-name to the corresponding key (as used in fields()).
    *
    * @return array
    *   Array(string $name => string $uniqueName).
    */
-  static function &fieldKeys() {
+  public static function &fieldKeys() {
     if (!isset(Civi::$statics[__CLASS__]['fieldKeys'])) {
       Civi::$statics[__CLASS__]['fieldKeys'] = array_flip(CRM_Utils_Array::collect('name', self::fields()));
     }
     return Civi::$statics[__CLASS__]['fieldKeys'];
   }
+
   /**
    * Returns the names of this table
    *
    * @return string
    */
-  static function getTableName() {
+  public static function getTableName() {
     return self::$_tableName;
   }
+
   /**
    * Returns if this table needs to be logged
    *
    * @return boolean
    */
-  function getLog() {
+  public function getLog() {
     return self::$_log;
   }
+
   /**
    * Returns the list of fields that can be imported
    *
@@ -195,10 +201,11 @@ class CRM_Mappins_DAO_MappinsRule extends CRM_Core_DAO {
    *
    * @return array
    */
-  static function &import($prefix = false) {
+  public static function &import($prefix = FALSE) {
     $r = CRM_Core_DAO_AllCoreTables::getImports(__CLASS__, 'mappins_rule', $prefix, array());
     return $r;
   }
+
   /**
    * Returns the list of fields that can be exported
    *
@@ -206,10 +213,11 @@ class CRM_Mappins_DAO_MappinsRule extends CRM_Core_DAO {
    *
    * @return array
    */
-  static function &export($prefix = false) {
+  public static function &export($prefix = FALSE) {
     $r = CRM_Core_DAO_AllCoreTables::getExports(__CLASS__, 'mappins_rule', $prefix, array());
     return $r;
   }
+
   /**
    * Returns the list of indices
    */
@@ -217,4 +225,5 @@ class CRM_Mappins_DAO_MappinsRule extends CRM_Core_DAO {
     $indices = array();
     return ($localize && !empty($indices)) ? CRM_Core_DAO_AllCoreTables::multilingualize(__CLASS__, $indices) : $indices;
   }
+
 }

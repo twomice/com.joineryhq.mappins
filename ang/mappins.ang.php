@@ -15,6 +15,5 @@ return array(
   'partials' => array(
     0 => 'ang/partials',
   ),
-  'settings' => array(
-  ),
+  'settings' => array(),
 );
