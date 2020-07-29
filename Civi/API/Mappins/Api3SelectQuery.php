@@ -11,12 +11,12 @@ class Api3SelectQuery extends \Civi\API\Api3SelectQuery {
 
   public $extraSelectFields;
 
-  function __construct($entity, $checkPermissions) {
+  public function __construct($entity, $checkPermissions) {
     parent::__construct($entity, $checkPermissions);
     $this->buildExtraSelectFields();
   }
 
-  function buildWhereClause() {
+  public function buildWhereClause() {
     parent::buildWhereClause();
 
     $filters = array();
@@ -45,7 +45,7 @@ class Api3SelectQuery extends \Civi\API\Api3SelectQuery {
     }
   }
 
-  function buildSelectFields() {
+  public function buildSelectFields() {
     parent::buildSelectFields();
     $this->selectFields = array_merge($this->selectFields, $this->extraSelectFields);
   }
@@ -60,11 +60,11 @@ class Api3SelectQuery extends \Civi\API\Api3SelectQuery {
   private function buildExtraSelectFields_MappinsRuleProfile() {
     $rule_field_names = array();
     $ruleprofile_dao_name = \CRM_Core_DAO_AllCoreTables::getClassForTable('civicrm_mappins_rule_profile');
-    $ruleprofile_dao = new $ruleprofile_dao_name;
+    $ruleprofile_dao = new $ruleprofile_dao_name();
     $ruleprofile_field_names = array_keys($ruleprofile_dao->fields());
 
     $rule_dao_name = \CRM_Core_DAO_AllCoreTables::getClassForTable('civicrm_mappins_rule');
-    $rule_dao = new $rule_dao_name;
+    $rule_dao = new $rule_dao_name();
 
     foreach (array_keys($rule_dao->fields()) as $rule_field_name) {
       if (!in_array($rule_field_name, $ruleprofile_field_names)) {

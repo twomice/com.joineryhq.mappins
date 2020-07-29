@@ -23,7 +23,7 @@
 | GNU Affero General Public License or the licensing of CiviCRM,     |
 | see the CiviCRM license FAQ at http://civicrm.org/licensing        |
 +--------------------------------------------------------------------+
-*/
+ */
 /**
  * @package CRM
  * @copyright CiviCRM LLC (c) 2004-2017
@@ -43,13 +43,13 @@ class CRM_Mappins_DAO_MappinsRuleProfile extends CRM_Core_DAO {
    *
    * @var string
    */
-  static $_tableName = 'civicrm_mappins_rule_profile';
+  public static $_tableName = 'civicrm_mappins_rule_profile';
   /**
    * Should CiviCRM log any modifications to this table in the civicrm_log table.
    *
-   * @var boolean
+   * @var bool
    */
-  static $_log = true;
+  public static $_log = TRUE;
   /**
    * Unique MappinsRuleProfile ID
    *
@@ -74,52 +74,55 @@ class CRM_Mappins_DAO_MappinsRuleProfile extends CRM_Core_DAO {
    * @var int
    */
   public $weight;
+
   /**
    * Class constructor.
    */
-  function __construct() {
+  public function __construct() {
     $this->__table = 'civicrm_mappins_rule_profile';
     parent::__construct();
   }
+
   /**
    * Returns foreign keys and entity references.
    *
    * @return array
    *   [CRM_Core_Reference_Interface]
    */
-  static function getReferenceColumns() {
+  public static function getReferenceColumns() {
     if (!isset(Civi::$statics[__CLASS__]['links'])) {
       Civi::$statics[__CLASS__]['links'] = static ::createReferenceColumns(__CLASS__);
-      Civi::$statics[__CLASS__]['links'][] = new CRM_Core_Reference_Basic(self::getTableName() , 'rule_id', 'civicrm_mappins_rule', 'id');
-      Civi::$statics[__CLASS__]['links'][] = new CRM_Core_Reference_Basic(self::getTableName() , 'uf_group_id', 'civicrm_uf_group', 'id');
+      Civi::$statics[__CLASS__]['links'][] = new CRM_Core_Reference_Basic(self::getTableName(), 'rule_id', 'civicrm_mappins_rule', 'id');
+      Civi::$statics[__CLASS__]['links'][] = new CRM_Core_Reference_Basic(self::getTableName(), 'uf_group_id', 'civicrm_uf_group', 'id');
       CRM_Core_DAO_AllCoreTables::invoke(__CLASS__, 'links_callback', Civi::$statics[__CLASS__]['links']);
     }
     return Civi::$statics[__CLASS__]['links'];
   }
+
   /**
    * Returns all the column names of this table
    *
    * @return array
    */
-  static function &fields() {
+  public static function &fields() {
     if (!isset(Civi::$statics[__CLASS__]['fields'])) {
       Civi::$statics[__CLASS__]['fields'] = array(
         'id' => array(
           'name' => 'id',
           'type' => CRM_Utils_Type::T_INT,
           'description' => 'Unique MappinsRuleProfile ID',
-          'required' => true,
+          'required' => TRUE,
           'table_name' => 'civicrm_mappins_rule_profile',
           'entity' => 'MappinsRuleProfile',
           'bao' => 'CRM_Mappins_DAO_MappinsRuleProfile',
           'localizable' => 0,
-        ) ,
+        ),
         'rule_id' => array(
           'name' => 'rule_id',
           'type' => CRM_Utils_Type::T_INT,
           'title' => ts('Rule') ,
           'description' => 'FK to civicrm_mappins_rule.id',
-          'required' => true,
+          'required' => TRUE,
           'table_name' => 'civicrm_mappins_rule_profile',
           'entity' => 'MappinsRuleProfile',
           'bao' => 'CRM_Mappins_DAO_MappinsRuleProfile',
@@ -127,8 +130,8 @@ class CRM_Mappins_DAO_MappinsRuleProfile extends CRM_Core_DAO {
           'FKClassName' => 'CRM_Mappins_DAO_MappinsRule',
           'html' => array(
             'type' => 'Select',
-          ) ,
-        ) ,
+          ),
+        ),
         'uf_group_id' => array(
           'name' => 'uf_group_id',
           'type' => CRM_Utils_Type::T_INT,
@@ -141,11 +144,11 @@ class CRM_Mappins_DAO_MappinsRuleProfile extends CRM_Core_DAO {
           'FKClassName' => 'CRM_Core_DAO_UFGroup',
           'html' => array(
             'type' => 'Select',
-          ) ,
+          ),
           'pseudoconstant' => array(
             'callback' => 'CRM_Mappins_BAO_MappinsRule::getUFGroupOptions',
-          )
-        ) ,
+          ),
+        ),
         'weight' => array(
           'name' => 'weight',
           'type' => CRM_Utils_Type::T_INT,
@@ -162,34 +165,38 @@ class CRM_Mappins_DAO_MappinsRuleProfile extends CRM_Core_DAO {
     }
     return Civi::$statics[__CLASS__]['fields'];
   }
+
   /**
    * Return a mapping from field-name to the corresponding key (as used in fields()).
    *
    * @return array
    *   Array(string $name => string $uniqueName).
    */
-  static function &fieldKeys() {
+  public static function &fieldKeys() {
     if (!isset(Civi::$statics[__CLASS__]['fieldKeys'])) {
       Civi::$statics[__CLASS__]['fieldKeys'] = array_flip(CRM_Utils_Array::collect('name', self::fields()));
     }
     return Civi::$statics[__CLASS__]['fieldKeys'];
   }
+
   /**
    * Returns the names of this table
    *
    * @return string
    */
-  static function getTableName() {
+  public static function getTableName() {
     return self::$_tableName;
   }
+
   /**
    * Returns if this table needs to be logged
    *
    * @return boolean
    */
-  function getLog() {
+  public function getLog() {
     return self::$_log;
   }
+
   /**
    * Returns the list of fields that can be imported
    *
@@ -197,10 +204,11 @@ class CRM_Mappins_DAO_MappinsRuleProfile extends CRM_Core_DAO {
    *
    * @return array
    */
-  static function &import($prefix = false) {
+  public static function &import($prefix = FALSE) {
     $r = CRM_Core_DAO_AllCoreTables::getImports(__CLASS__, 'mappins_rule_profile', $prefix, array());
     return $r;
   }
+
   /**
    * Returns the list of fields that can be exported
    *
@@ -208,10 +216,11 @@ class CRM_Mappins_DAO_MappinsRuleProfile extends CRM_Core_DAO {
    *
    * @return array
    */
-  static function &export($prefix = false) {
+  public static function &export($prefix = FALSE) {
     $r = CRM_Core_DAO_AllCoreTables::getExports(__CLASS__, 'mappins_rule_profile', $prefix, array());
     return $r;
   }
+
   /**
    * Returns the list of indices
    */
@@ -221,19 +230,20 @@ class CRM_Mappins_DAO_MappinsRuleProfile extends CRM_Core_DAO {
         'name' => 'index_rule_id',
         'field' => array(
           0 => 'rule_id',
-        ) ,
-        'localizable' => false,
+        ),
+        'localizable' => FALSE,
         'sig' => 'civicrm_mappins_rule_profile::0::rule_id',
-      ) ,
+      ),
       'index_uf_group_id' => array(
         'name' => 'index_uf_group_id',
         'field' => array(
           0 => 'uf_group_id',
-        ) ,
-        'localizable' => false,
+        ),
+        'localizable' => FALSE,
         'sig' => 'civicrm_mappins_rule_profile::0::uf_group_id',
-      ) ,
+      ),
     );
     return ($localize && !empty($indices)) ? CRM_Core_DAO_AllCoreTables::multilingualize(__CLASS__, $indices) : $indices;
   }
+
 }

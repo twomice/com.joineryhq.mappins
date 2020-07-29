@@ -59,9 +59,7 @@ function _civicrm_api3_mappins_rule_profile_DAO() {
 
 function _civicrm_api3_mappins_rule_profile_get_with_rules($params) {
   $sql = CRM_Utils_SQL_Select::fragment();
-  $sql
-                                                                                      ->join('civicrm_mappins_rule', 'INNER JOIN civicrm_mappins_rule r ON r.id = a.rule_id')
-  ;
+  $sql->join('civicrm_mappins_rule', 'INNER JOIN civicrm_mappins_rule r ON r.id = a.rule_id');
   $ruleprofile_dao_name = CRM_Core_DAO_AllCoreTables::getClassForTable('civicrm_mappins_rule_profile');
   return _civicrm_api3_mappins_rule_profile_basic_get($ruleprofile_dao_name, $params, TRUE, "", $sql, FALSE);
 }
@@ -90,7 +88,7 @@ function _civicrm_api3_mappins_rule_profile_basic_get($bao_name, $params, $retur
   $entity = CRM_Core_DAO_AllCoreTables::getBriefName(str_replace('_BAO_', '_DAO_', $bao_name));
   $options = _civicrm_api3_get_options_from_params($params);
 
-  require_once('Civi/API/Mappins/Api3SelectQuery.php');
+  require_once 'Civi/API/Mappins/Api3SelectQuery.php';
   $query = new \Civi\API\Mappins\Api3SelectQuery($entity, CRM_Utils_Array::value('check_permissions', $params, FALSE));
   $query->where = $params;
   if ($options['is_count']) {
