@@ -187,7 +187,7 @@ function mappins_civicrm_entityTypes(&$entityTypes) {
 function mappins_civicrm_navigationMenu(&$menu) {
   _mappins_get_max_navID($menu, $max_navID);
   _mappins_civix_insert_navigation_menu($menu, 'Administer/Customize Data and Screens', array(
-    'label' => ts('Map Pins', array('domain' => 'com.joineryhq.mappins')),
+    'label' => E::ts('Map Pins', array('domain' => 'com.joineryhq.mappins')),
     'name' => 'Map Pins',
     'url' => 'civicrm/a/#/mappins/rules',
     'permission' => 'administer CiviCRM',
