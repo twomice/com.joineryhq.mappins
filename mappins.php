@@ -13,6 +13,7 @@
 // * NOTE: ignore back-compatibility; this is alpha, so breaking changes without smooth upgrade path are fine.
 
 require_once 'mappins.civix.php';
+use CRM_Mappins_ExtensionUtil as E;
 
 /**
  * Implements hook_civicrm_buildForm().
@@ -187,7 +188,7 @@ function mappins_civicrm_entityTypes(&$entityTypes) {
 function mappins_civicrm_navigationMenu(&$menu) {
   _mappins_get_max_navID($menu, $max_navID);
   _mappins_civix_insert_navigation_menu($menu, 'Administer/Customize Data and Screens', array(
-    'label' => E::ts('Map Pins', array('domain' => 'com.joineryhq.mappins')),
+    'label' => E::ts('Map Pins'),
     'name' => 'Map Pins',
     'url' => 'civicrm/a/#/mappins/rules',
     'permission' => 'administer CiviCRM',
