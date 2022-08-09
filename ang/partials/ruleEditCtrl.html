@@ -48,14 +48,14 @@
       <td class="label">{{ts('Profile(s)')}}</td>
       <td>
         <select
+          class="huge"
           multiple
-          ui-jq="select2"
-          ui-options="{dropdownAutoWidth : true}"
+          crm-ui-select="{dropdownAutoWidth : true}"
           required
           id="uf_group_id"
           ng-model="rule.uf_group_id"
-          ng-options="profile.id as profile.title for profile in profiles| orderBy:'title'"
           >
+          <option value="{{ profile.id }}" ng-repeat="profile in profiles| orderBy:'title'">{{ profile.title }}</option>
         </select><br />
         <span class="description">{{ts('This rule will only apply on the selected profile(s).')}}</span></td>
     </tr>

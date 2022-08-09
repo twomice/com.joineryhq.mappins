@@ -18,7 +18,7 @@
   <version>0.2</version>
   <develStage>alpha</develStage>
   <compatibility>
-    <ver>4.7</ver>
+    <ver>5.52</ver>
   </compatibility>
   <comments>After installation, configure rules at Administrator &gt; Customize Data and Screens &gt; Map Pins.</comments>
   <civix>
