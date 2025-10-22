@@ -12,7 +12,7 @@ class CRM_Mappins_BAO_MappinsRuleProfile extends CRM_Mappins_DAO_MappinsRuleProf
   // $entityName = 'MappinsRuleProfile';
   // $hook = empty($params['id']) ? 'create' : 'edit';
 
-  // CRM_Utils_Hook::pre($hook, $entityName, CRM_Utils_Array::value('id', $params), $params);
+  // CRM_Utils_Hook::pre($hook, $entityName, $params['id'] ?? NULL, $params);
   // $instance = new $className();
   // $instance->copyValues($params);
   // $instance->save();
