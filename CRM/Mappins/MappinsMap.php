@@ -70,9 +70,11 @@ class CRM_Mappins_MappinsMap {
    * src of the pin images within the Smarty template variables.
    */
   public function replaceLocationPins() {
-    foreach ($this->tpl->_tpl_vars['locations'] as &$location) {
+    $locations = $this->tpl->getTemplateVars('locations');
+    foreach ($locations as &$location) {
       $this->setLocationImage($location);
     }
+    $this->tpl->assign('locations', $locations);
   }
 
   /**
