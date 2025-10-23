@@ -17,7 +17,6 @@ function _civicrm_api3_mappins_rule_create_spec(&$spec) {
  *
  * @param array $params
  * @return array API result descriptor
- * @throws CRM_Core_Exception
  */
 function civicrm_api3_mappins_rule_create($params) {
   $ret = _civicrm_api3_basic_create(_civicrm_api3_get_BAO(__FUNCTION__), $params);
@@ -106,7 +105,6 @@ function _civicrm_api3_mappins_rule_create_mappins_rule_profile($params, $rule) 
  *
  * @param array $params
  * @return array API result descriptor
- * @throws CRM_Core_Exception
  */
 function civicrm_api3_mappins_rule_delete($params) {
   return _civicrm_api3_basic_delete(_civicrm_api3_get_BAO(__FUNCTION__), $params);
@@ -117,7 +115,6 @@ function civicrm_api3_mappins_rule_delete($params) {
  *
  * @param array $params
  * @return array API result descriptor
- * @throws CRM_Core_Exception
  */
 function civicrm_api3_mappins_rule_get($params) {
   $options = _civicrm_api3_get_options_from_params($params);
