@@ -18,10 +18,22 @@
   <version>0.2</version>
   <develStage>alpha</develStage>
   <compatibility>
-    <ver>4.7</ver>
+    <ver>5.51</ver>
   </compatibility>
   <comments>After installation, configure rules at Administrator &gt; Customize Data and Screens &gt; Map Pins.</comments>
   <civix>
     <namespace>CRM/Mappins</namespace>
+    <format>25.10.2</format>
   </civix>
+  <mixins>
+    <mixin>ang-php@1.0.0</mixin>
+    <mixin>menu-xml@1.0.0</mixin>
+    <mixin>entity-types-php@2.0.0</mixin>
+    <mixin>scan-classes@1.0.0</mixin>
+  </mixins>
+  <classloader>
+    <psr0 prefix="CRM_" path="."/>
+    <psr4 prefix="Civi\" path="Civi"/>
+  </classloader>
+  <upgrader>CiviMix\Schema\Mappins\AutomaticUpgrader</upgrader>
 </extension>
