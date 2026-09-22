@@ -89,7 +89,7 @@ function _civicrm_api3_mappins_rule_profile_basic_get($bao_name, $params, $retur
   $query = new \Civi\API\Mappins\Api3SelectQuery($entity, CRM_Utils_Array::value('check_permissions', $params, FALSE));
   $query->where = $params;
   if ($options['is_count']) {
-    $query->select = array('count_rows');
+    $query->select = ['count_rows'];
   }
   else {
     $query->select = array_keys(array_filter($options['return']));

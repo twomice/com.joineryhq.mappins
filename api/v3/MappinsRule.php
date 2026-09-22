@@ -36,11 +36,11 @@ function _civicrm_api3_mappins_rule_create_mappins_rule_profile($params, $rule) 
     }
 
     if (is_array($uf_group_ids)) {
-      $rule_profile_result = civicrm_api3('MappinsRuleProfile', 'get', array(
+      $rule_profile_result = civicrm_api3('MappinsRuleProfile', 'get', [
         'rule_id' => $rule['id'],
-        'return' => array("id", "uf_group_id", "weight"),
-        'options' => array('sort' => "weight"),
-      ));
+        'return' => ["id", "uf_group_id", "weight"],
+        'options' => ['sort' => "weight"],
+      ]);
 
       // Compile lists of entities to create.
       $to_create = $uf_group_ids;
@@ -70,31 +70,31 @@ function _civicrm_api3_mappins_rule_create_mappins_rule_profile($params, $rule) 
         }
         else {
           // Existing entity is not in uf_group_ids, so delete it
-          civicrm_api3('MappinsRuleProfile', 'delete', array(
+          civicrm_api3('MappinsRuleProfile', 'delete', [
             'id' => $rule_profile_value['id'],
-          ));
+          ]);
         }
       }
       foreach ($to_create as $uf_group_id) {
-        civicrm_api3('MappinsRuleProfile', 'create', array(
+        civicrm_api3('MappinsRuleProfile', 'create', [
           'uf_group_id' => ($uf_group_id > 0 ? $uf_group_id : NULL),
           'weight' => -1,
           'rule_id' => $rule['id'],
-        ));
+        ]);
       }
 
       // Correct new weights by setting them all to the entity ID.  This works
       // because all new MappinsRuleProfile entities should have the highest
       // weight.
-      $weighting_ruleprofile_result = civicrm_api3('MappinsRuleProfile', 'get', array(
+      $weighting_ruleprofile_result = civicrm_api3('MappinsRuleProfile', 'get', [
         'weight' => -1,
-        'return' => array("id"),
-      ));
+        'return' => ["id"],
+      ]);
       foreach ($weighting_ruleprofile_result['values'] as $weighting_ruleprofile_value) {
-        civicrm_api3('MappinsRuleProfile', 'create', array(
+        civicrm_api3('MappinsRuleProfile', 'create', [
           'id' => $weighting_ruleprofile_value['id'],
           'weight' => $weighting_ruleprofile_value['id'],
-        ));
+        ]);
       }
     }
   }
@@ -144,7 +144,7 @@ function _civicrm_api3_mappins_rule_get_with_uf_group_id($params) {
   // json-encode the uf_group_id value.
   foreach ($result['values'] as &$value) {
     if (empty($value['uf_group_id'])) {
-      $value['uf_group_id'] = array();
+      $value['uf_group_id'] = [];
     }
     else {
       $value['uf_group_id'] = explode(',', $value['uf_group_id']);
@@ -181,7 +181,7 @@ function _civicrm_api3_mappins_rule_basic_get($bao_name, $params, $returnAsSucce
   $query = new \Civi\API\Mappins\Api3SelectQuery($entity, CRM_Utils_Array::value('check_permissions', $params, FALSE));
   $query->where = $params;
   if ($options['is_count']) {
-    $query->select = array('count_rows');
+    $query->select = ['count_rows'];
   }
   else {
     $query->select = array_keys(array_filter($options['return']));

@@ -4,15 +4,15 @@
 // in CiviCRM. See also:
 // http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_angularModules
 
-return array(
-  'js' => array(
+return [
+  'js' => [
     0 => 'ang/mappins.js',
     1 => 'ang/partials/*.js',
-  ),
-  'css' => array(
+  ],
+  'css' => [
     0 => 'ang/mappins.css',
-  ),
-  'partials' => array(
+  ],
+  'partials' => [
     0 => 'ang/partials',
-  ),
-);
+  ],
+];

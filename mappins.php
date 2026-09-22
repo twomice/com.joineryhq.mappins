@@ -96,7 +96,7 @@ function mappins_civicrm_enable() {
  */
 function mappins_civicrm_navigationMenu(&$menu) {
   _mappins_get_max_navID($menu, $max_navID);
-  _mappins_civix_insert_navigation_menu($menu, 'Administer/Customize Data and Screens', array(
+  _mappins_civix_insert_navigation_menu($menu, 'Administer/Customize Data and Screens', [
     'label' => E::ts('Map Pins'),
     'name' => 'Map Pins',
     'url' => 'civicrm/a/#/mappins/rules',
@@ -104,7 +104,7 @@ function mappins_civicrm_navigationMenu(&$menu) {
     'operator' => 'AND',
     'separator' => NULL,
     'navID' => ++$max_navID,
-  ));
+  ]);
   _mappins_civix_navigationMenu($menu);
 }
 

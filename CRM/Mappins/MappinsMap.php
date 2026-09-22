@@ -54,7 +54,7 @@ class CRM_Mappins_MappinsMap {
    */
   public function getRules() {
     if (!isset($this->rules)) {
-      $this->rules = array();
+      $this->rules = [];
 
       if ($this->gid) {
         $this->rules = self::getRulesPerProfile($this->gid);
@@ -122,7 +122,7 @@ class CRM_Mappins_MappinsMap {
   protected static function doesLocationMatchRule($location, $rule) {
     $contact_id = $location['contactID'];
     $entity = '';
-    $api_params = array();
+    $api_params = [];
     switch ($rule['criteria']) {
       case 'group':
         // Use the Contact api to check group membership, so that we're also
@@ -132,11 +132,11 @@ class CRM_Mappins_MappinsMap {
         //  https://issues.civicrm.org/jira/browse/CRM-11903
         //  https://issues.civicrm.org/jira/browse/CRM-9021
         $entity = 'Contact';
-        $api_params = array(
+        $api_params = [
           'status' => "Added",
           'contact_id' => $contact_id,
-          'group' => array($rule['value'] => 1),
-        );
+          'group' => [$rule['value'] => 1],
+        ];
         break;
 
       case 'tag':
@@ -146,11 +146,11 @@ class CRM_Mappins_MappinsMap {
         }
 
         $entity = 'EntityTag';
-        $api_params = array(
+        $api_params = [
           'entity_id' => $contact_id,
           'entity_table' => "civicrm_contact",
           'tag_id' => $rule['value'],
-        );
+        ];
         break;
 
       case 'contact_sub_type':
@@ -159,11 +159,11 @@ class CRM_Mappins_MappinsMap {
           return FALSE;
         }
         $entity = 'Contact';
-        $api_params = array(
+        $api_params = [
           'status' => "Added",
           'id' => $contact_id,
           'contact_sub_type' => $rule['value'],
-        );
+        ];
         break;
 
       default:
@@ -175,15 +175,15 @@ class CRM_Mappins_MappinsMap {
   }
 
   private static function getRulesPerProfile($gid = NULL) {
-    $rules = array();
-    $params = array(
-      'options' => array(
+    $rules = [];
+    $params = [
+      'options' => [
         'limit' => 0,
         'sort' => "weight",
-      ),
-    );
+      ],
+    ];
     if ($gid === NULL) {
-      $params['uf_group_id'] = array('IS NULL' => 1);
+      $params['uf_group_id'] = ['IS NULL' => 1];
     }
     else {
       $params['uf_group_id'] = $gid;
