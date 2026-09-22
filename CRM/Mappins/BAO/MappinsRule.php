@@ -27,18 +27,18 @@ class CRM_Mappins_BAO_MappinsRule extends CRM_Mappins_DAO_MappinsRule {
   }
 
   public static function getCriteriaOptions() {
-    return array(
+    return [
       'contact_sub_type' => ts('Contact Sub Type'),
       'group' => ts('Group ID'),
       'tag' => ts('Tag ID'),
-    );
+    ];
   }
 
   public static function getUFGroupOptions() {
-    $uf_group_options = array();
-    $result = civicrm_api3('UFGroup', 'get', array(
-      'options' => array('limit' => 0),
-    ));
+    $uf_group_options = [];
+    $result = civicrm_api3('UFGroup', 'get', [
+      'options' => ['limit' => 0],
+    ]);
     foreach ($result['values'] as $value) {
       $uf_group_options[$value['id']] = $value['title'];
     }

@@ -19,7 +19,7 @@ class Api3SelectQuery extends \Civi\API\Api3SelectQuery {
   public function buildWhereClause() {
     parent::buildWhereClause();
 
-    $filters = array();
+    $filters = [];
     foreach ($this->where as $key => $value) {
       $table_name = $column_name = NULL;
 
@@ -35,7 +35,7 @@ class Api3SelectQuery extends \Civi\API\Api3SelectQuery {
       }
       $operator = is_array($value) ? \CRM_Utils_Array::first(array_keys($value)) : NULL;
       if (!in_array($operator, \CRM_Core_DAO::acceptedSQLOperators(), TRUE)) {
-        $value = array('=' => $value);
+        $value = ['=' => $value];
       }
       $filters[$key] = \CRM_Core_DAO::createSQLFilter("{$table_name}.{$column_name}", $value);
     }
@@ -58,7 +58,7 @@ class Api3SelectQuery extends \Civi\API\Api3SelectQuery {
   }
 
   private function buildExtraSelectFields_MappinsRuleProfile() {
-    $rule_field_names = array();
+    $rule_field_names = [];
     $ruleprofile_dao_name = \CRM_Core_DAO_AllCoreTables::getClassForTable('civicrm_mappins_rule_profile');
     $ruleprofile_dao = new $ruleprofile_dao_name();
     $ruleprofile_field_names = array_keys($ruleprofile_dao->fields());
@@ -75,9 +75,9 @@ class Api3SelectQuery extends \Civi\API\Api3SelectQuery {
   }
 
   private function buildExtraSelectFields_MappinsRule() {
-    $rule_field_names = array(
+    $rule_field_names = [
       "group_concat(if (rp.id AND rp.uf_group_id IS NULL, 'NULL', rp.uf_group_id))" => 'uf_group_id',
-    );
+    ];
     $this->extraSelectFields = $rule_field_names;
   }
 
