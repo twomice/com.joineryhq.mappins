@@ -174,7 +174,7 @@ function _civicrm_api3_mappins_rule_get_with_uf_group_id($params) {
  * @return array
  */
 function _civicrm_api3_mappins_rule_basic_get($bao_name, $params, $returnAsSuccess = TRUE, $entity = "", $sql = NULL, $uniqueFields = FALSE) {
-  $entity = CRM_Core_DAO_AllCoreTables::getBriefName(str_replace('_BAO_', '_DAO_', $bao_name));
+  $entity = CRM_Core_DAO_AllCoreTables::getEntityNameForClass(str_replace('_BAO_', '_DAO_', $bao_name));
   $options = _civicrm_api3_get_options_from_params($params);
 
   require_once 'Civi/API/Mappins/Api3SelectQuery.php';
